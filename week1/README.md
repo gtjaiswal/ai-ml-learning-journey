@@ -1,6 +1,7 @@
 # Week 1 Learning Schedule - AI/ML Foundations
 
 ## Overview
+
 A comprehensive 7-day learning plan covering mathematical foundations, Python libraries, and practical machine learning implementations. Total commitment: ~13-14 hours.
 
 ---
@@ -25,98 +26,98 @@ A comprehensive 7-day learning plan covering mathematical foundations, Python li
 
 ### Primary Video Resources
 
-#### 3Blue1Brown - Essence of Linear Algebra
+   #### 3Blue1Brown - Essence of Linear Algebra
 
-**Video 1: "Vectors, what even are they?"**
-- Link: https://www.youtube.com/watch?v=fNk_zzaMoSs
-- Duration: 9:52
-- What you'll learn: Geometric and numeric view of vectors
+   **Video 1: "Vectors, what even are they?"**
+   - Link: https://www.youtube.com/watch?v=fNk_zzaMoSs
+   - Duration: 9:52
+   - What you'll learn: Geometric and numeric view of vectors
 
-**Video 2: "Linear combinations, span, and basis vectors"**
-- Link: https://www.youtube.com/watch?v=k7RM-ot2NWY
-- Duration: 9:59
-- What you'll learn: How vectors combine to create vector spaces
+   **Video 2: "Linear combinations, span, and basis vectors"**
+   - Link: https://www.youtube.com/watch?v=k7RM-ot2NWY
+   - Duration: 9:59
+   - What you'll learn: How vectors combine to create vector spaces
 
-**Full Playlist (bookmark for future):**
-- Link: https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab
-- All 16 chapters - you'll use more throughout the course
+   **Full Playlist (bookmark for future):**
+   - Link: https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab
+   - All 16 chapters - you'll use more throughout the course
 
 ### Interactive Practice (Khan Academy)
 
-**Khan Academy Linear Algebra Course:**
-- Main page: https://www.khanacademy.org/math/linear-algebra
-- Start with "Vectors and spaces" section
-- Specific for Monday: "Vector intro for linear algebra"
-  - Link: https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/v/vector-introduction-linear-algebra
+   **Khan Academy Linear Algebra Course:**
+   - Main page: https://www.khanacademy.org/math/linear-algebra
+   - Start with "Vectors and spaces" section
+   - Specific for Monday: "Vector intro for linear algebra"
+   - Link: https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/v/vector-introduction-linear-algebra
 
-**Practice Exercises:**
-- Vector addition: https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/e/vector_addition_and_subtraction
-- Vector scaling: https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/e/vector-scaling
+   **Practice Exercises:**
+   - Vector addition: https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/e/vector_addition_and_subtraction
+   - Vector scaling: https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/e/vector-scaling
 
 ### Reading Materials (Optional but Helpful)
 
-**Visual Introduction to Vectors**
-- Better Explained: "An Intuitive Guide to Linear Algebra"
-  - Link: https://betterexplained.com/articles/linear-algebra-guide/
-- Quick read, excellent visual explanations
+   **Visual Introduction to Vectors**
+   - Better Explained: "An Intuitive Guide to Linear Algebra"
+   - Link: https://betterexplained.com/articles/linear-algebra-guide/
+   - Quick read, excellent visual explanations
 
-**AI/ML Context (Why This Matters)**
-- Article: "A Gentle Introduction to Vectors for Machine Learning"
-  - Link: https://machinelearningmastery.com/gentle-introduction-vectors-machine-learning/
-  - Duration: 10-15 min read
-  - Connects vectors directly to ML applications
+   **AI/ML Context (Why This Matters)**
+   - Article: "A Gentle Introduction to Vectors for Machine Learning"
+   - Link: https://machinelearningmastery.com/gentle-introduction-vectors-machine-learning/
+   - Duration: 10-15 min read
+   - Connects vectors directly to ML applications
 
 ### Day1's Schedule (60 minutes total)
 
-**Recommended Order:**
+   **Recommended Order:**
 
-1. **Watch: 3Blue1Brown Video 1** (10 min)
-   - "Vectors, what even are they?"
-   - Take notes on key concepts
+   1. **Watch: 3Blue1Brown Video 1** (10 min)
+      - "Vectors, what even are they?"
+      - Take notes on key concepts
 
-2. **Watch: 3Blue1Brown Video 2** (10 min)
-   - "Linear combinations, span, and basis vectors"
-   - Pause and rewind as needed
+   2. **Watch: 3Blue1Brown Video 2** (10 min)
+      - "Linear combinations, span, and basis vectors"
+      - Pause and rewind as needed
 
-3. **Read: Better Explained article** (10 min)
-   - Get alternative explanation
-   - Connect concepts
+   3. **Read: Better Explained article** (10 min)
+      - Get alternative explanation
+      - Connect concepts
 
-4. **Practice: Draw on paper** (15 min)
-   - Draw 3-4 vectors on graph paper
-   - Practice vector addition visually
-   - Try vector subtraction
+   4. **Practice: Draw on paper** (15 min)
+      - Draw 3-4 vectors on graph paper
+      - Practice vector addition visually
+      - Try vector subtraction
 
-5. **Reflect and Note-take** (15 min)
-   - Write in your own words: "What is a vector?"
-   - Answer: "Why do we care about vectors in AI/ML?"
-   - List 2-3 things that are still unclear (totally normal!)
+   5. **Reflect and Note-take** (15 min)
+      - Write in your own words: "What is a vector?"
+      - Answer: "Why do we care about vectors in AI/ML?"
+      - List 2-3 things that are still unclear (totally normal!)
 
 ### Success Criteria
 
-After Day1's session, you should be able to:
+   After Day1's session, you should be able to:
 
-- ✅ Explain what a vector is (geometrically and numerically)
-- ✅ Draw vector addition on paper
-- ✅ Understand that vectors can represent data points
-- ✅ See the connection to AI (data is vectors, embeddings are vectors)
-- ✅ Have specific questions written down for further exploration
+   - ✅ Explain what a vector is (geometrically and numerically)
+   - ✅ Draw vector addition on paper
+   - ✅ Understand that vectors can represent data points
+   - ✅ See the connection to AI (data is vectors, embeddings are vectors)
+   - ✅ Have specific questions written down for further exploration
 
-You do NOT need to:
+   You do NOT need to:
 
-- ❌ Memorize formulas
-- ❌ Do complex calculations
-- ❌ Understand eigenvectors or matrix decomposition (that's advanced)
-- ❌ Write any code yet
+   - ❌ Memorize formulas
+   - ❌ Do complex calculations
+   - ❌ Understand eigenvectors or matrix decomposition (that's advanced)
+   - ❌ Write any code yet
 
 ### End of Day1 Checklist
 
-- [ ] Watched both 3Blue1Brown videos
-- [ ] Read at least one supplementary article
-- [ ] Drew vectors on paper and practiced addition
-- [ ] Wrote notes answering: "What is a vector and why does AI use them?"
-- [ ] Have 2-3 questions written down for further exploration
-- [ ] Spent approximately 60 minutes total
+   - [ ] Watched both 3Blue1Brown videos
+   - [ ] Read at least one supplementary article
+   - [ ] Drew vectors on paper and practiced addition
+   - [ ] Wrote notes answering: "What is a vector and why does AI use them?"
+   - [ ] Have 2-3 questions written down for further exploration
+   - [ ] Spent approximately 60 minutes total
 
 ---
 
@@ -436,189 +437,189 @@ You do NOT need to:
 
 ### Part 1: NumPy Deep Dive
 
-#### Core NumPy Operations
+   #### Core NumPy Operations
 
-**Topics to Cover:**
-- Array creation methods (zeros, ones, arange, linspace)
-- Array indexing and slicing (advanced)
-- Reshaping and transposing
-- Broadcasting rules
-- Element-wise operations
-- Aggregations (sum, mean, std, min, max)
+   **Topics to Cover:**
+      - Array creation methods (zeros, ones, arange, linspace)
+      - Array indexing and slicing (advanced)
+      - Reshaping and transposing
+      - Broadcasting rules
+      - Element-wise operations
+      - Aggregations (sum, mean, std, min, max)
 
-**Resources:**
-- NumPy Documentation: https://numpy.org/doc/stable/user/quickstart.html
-- Tutorial: https://numpy.org/doc/stable/user/absolute_beginners.html
+   **Resources:**
+      - NumPy Documentation: https://numpy.org/doc/stable/user/quickstart.html
+      - Tutorial: https://numpy.org/doc/stable/user/absolute_beginners.html
 
-**Practice Exercises:**
+   **Practice Exercises:**
 
-Create a Jupyter notebook and work through:
-1. Create 5 different arrays using different methods
-2. Practice slicing: get rows, columns, subsets
-3. Reshape 1D array to 2D and back
-4. Practice broadcasting: add vector to matrix
-5. Calculate statistics on transaction data
+      Create a Jupyter notebook and work through:
+      1. Create 5 different arrays using different methods
+      2. Practice slicing: get rows, columns, subsets
+      3. Reshape 1D array to 2D and back
+      4. Practice broadcasting: add vector to matrix
+      5. Calculate statistics on transaction data
 
-#### NumPy for ML
+   #### NumPy for ML
 
-**Topics to Cover:**
-- Dot products and matrix multiplication (np.dot, @)
-- Linear algebra operations
-- Random number generation
-- Vectorization (why loops are slow)
-- **Implement cosine similarity** (critical for embeddings!)
+   **Topics to Cover:**
+   - Dot products and matrix multiplication (np.dot, @)
+   - Linear algebra operations
+   - Random number generation
+   - Vectorization (why loops are slow)
+   - Implement cosine similarity (critical for embeddings!)
 
-**Key Implementations:**
+   **Key Implementations:**
 
-**Exercise 1: Cosine Similarity**
-```
-Requirements:
-- Input: Two 1D arrays (vectors)
-- Output: Similarity score between -1 and 1
-- Use: np.dot(), np.linalg.norm()
-- Test with sample transaction vectors
-```
+   **Exercise 1: Cosine Similarity**
+   ```
+   Requirements:
+   - Input: Two 1D arrays (vectors)
+   - Output: Similarity score between -1 and 1
+   - Use: np.dot(), np.linalg.norm()
+   - Test with sample transaction vectors
+   ```
 
-**Exercise 2: Normalize Vectors**
-```
-Requirements:
-- Input: 1D array
-- Output: Normalized array (magnitude = 1)
-- Important for embeddings later
-```
+   **Exercise 2: Normalize Vectors**
+   ```
+   Requirements:
+   - Input: 1D array
+   - Output: Normalized array (magnitude = 1)
+   - Important for embeddings later
+   ```
 
-**Exercise 3: Distance Matrix**
-```
-Requirements:
-- Input: 2D array (multiple vectors as rows)
-- Output: Matrix of pairwise distances
-- Use broadcasting, not loops
-```
+   **Exercise 3: Distance Matrix**
+   ```
+   Requirements:
+   - Input: 2D array (multiple vectors as rows)
+   - Output: Matrix of pairwise distances
+   - Use broadcasting, not loops
+   ```
 
 ### Part 2: Scikit-learn Basics (2 hours)
 
-#### Core Scikit-learn Concepts
+   #### Core Scikit-learn Concepts
 
-**Topics to Cover:**
-- What is scikit-learn?
-- ML workflow: load data → split → train → evaluate
-- train_test_split (why and how)
-- Basic metrics: accuracy, precision, recall
-- Cross-validation concept
+   **Topics to Cover:**
+   - What is scikit-learn?
+   - ML workflow: load data → split → train → evaluate
+   - train_test_split (why and how)
+   - Basic metrics: accuracy, precision, recall
+   - Cross-validation concept
 
-**Setup:**
-```bash
-pip install scikit-learn
+   **Setup:**
+   ```bash
+   pip install scikit-learn
 
-Key imports:
-- from sklearn.model_selection import train_test_split
-- from sklearn.metrics import accuracy_score, classification_report
-- from sklearn.preprocessing import StandardScaler
-```
+   Key imports:
+   - from sklearn.model_selection import train_test_split
+   - from sklearn.metrics import accuracy_score, classification_report
+   - from sklearn.preprocessing import StandardScaler
+   ```
 
-**Resources:**
-- Scikit-learn Getting Started: https://scikit-learn.org/stable/getting_started.html
-- Video: "Scikit-learn Crash Course" by freeCodeCamp
-  - Link: https://www.youtube.com/watch?v=0B5eIE_1vpU (watch first 30 min)
+   **Resources:**
+   - Scikit-learn Getting Started: https://scikit-learn.org/stable/getting_started.html
+   - Video: "Scikit-learn Crash Course" by freeCodeCamp
+   - Link: https://www.youtube.com/watch?v=0B5eIE_1vpU (watch first 30 min)
 
-#### Build Your First Classifier
+   #### Build Your First Classifier
 
-**Mini-Project: Transaction Fraud Detection (Simple Version)**
+   **Mini-Project: Transaction Fraud Detection (Simple Version)**
 
-**Step 1: Get Data**
-- Use Kaggle "Credit Card Fraud Detection" dataset
-- Or create synthetic transaction data
-- Features: amount, time, merchant_category
-- Label: fraud (0/1)
+   **Step 1: Get Data**
+   - Use Kaggle "Credit Card Fraud Detection" dataset
+   - Or create synthetic transaction data
+   - Features: amount, time, merchant_category
+   - Label: fraud (0/1)
 
-**Step 2: Prepare Data**
-- Load with pandas
-- Convert to NumPy arrays
-- Split: 80% train, 20% test
-- Use train_test_split with random_state=42
+   **Step 2: Prepare Data**
+   - Load with pandas
+   - Convert to NumPy arrays
+   - Split: 80% train, 20% test
+   - Use train_test_split with random_state=42
 
-**Step 3: Train Simple Classifier**
-- Use Logistic Regression
-- Understand: what is training? what are parameters?
-- Fit the model on training data
+   **Step 3: Train Simple Classifier**
+   - Use Logistic Regression
+   - Understand: what is training? what are parameters?
+   - Fit the model on training data
 
-**Step 4: Evaluate**
-- Predict on test data
-- Calculate accuracy
-- Print classification report
-- Understand: precision, recall, F1-score
+   **Step 4: Evaluate**
+   - Predict on test data
+   - Calculate accuracy
+   - Print classification report
+   - Understand: precision, recall, F1-score
 
-**Step 5: Reflection**
-- Why split data into train/test?
-- What does accuracy actually mean?
-- Why might accuracy be misleading for fraud?
+   **Step 5: Reflection**
+   - Why split data into train/test?
+   - What does accuracy actually mean?
+   - Why might accuracy be misleading for fraud?
 
-**Resources:**
-- Scikit-learn Logistic Regression: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
-- Classification Metrics: https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics
-- Tutorial: https://machinelearningmastery.com/machine-learning-in-python-step-by-step/
+   **Resources:**
+   - Scikit-learn Logistic Regression: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
+   - Classification Metrics: https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics
+   - Tutorial: https://machinelearningmastery.com/machine-learning-in-python-step-by-step/
 
 ### Day6 Deliverables
 
-By end of Day6, you should have:
+   By end of Day6, you should have:
 
-**NumPy :**
-- ✅ Jupyter notebook with NumPy exercises
-- ✅ Implemented cosine similarity function
-- ✅ Implemented vector normalization
-- ✅ Comfortable with array operations
-- ✅ Understand vectorization vs loops
+   **NumPy :**
+   - ✅ Jupyter notebook with NumPy exercises
+   - ✅ Implemented cosine similarity function
+   - ✅ Implemented vector normalization
+   - ✅ Comfortable with array operations
+   - ✅ Understand vectorization vs loops
 
-**Scikit-learn :**
-- ✅ First ML classifier trained and tested
-- ✅ Understand train/test split concept
-- ✅ Can calculate accuracy, precision, recall
-- ✅ Working fraud detection model (simple version)
-- ✅ Jupyter notebook documenting the process
+   **Scikit-learn :**
+   - ✅ First ML classifier trained and tested
+   - ✅ Understand train/test split concept
+   - ✅ Can calculate accuracy, precision, recall
+   - ✅ Working fraud detection model (simple version)
+   - ✅ Jupyter notebook documenting the process
 
-**Conceptual Understanding:**
-- ✅ Why we split data
-- ✅ What "training" means
-- ✅ How to evaluate model performance
-- ✅ Connection between NumPy and scikit-learn
+   **Conceptual Understanding:**
+   - ✅ Why we split data
+   - ✅ What "training" means
+   - ✅ How to evaluate model performance
+   - ✅ Connection between NumPy and scikit-learn
 
 ### Why This Addition Is Valuable
 
-**Benefits for Your Learning Path:**
+   **Benefits for Your Learning Path:**
 
-1. **Connects Math to Practice**
-   - Vectors/matrices from Mon-Wed → now used in real ML
-   - See why linear algebra matters immediately
+   1. **Connects Math to Practice**
+      - Vectors/matrices from Mon-Wed → now used in real ML
+      - See why linear algebra matters immediately
 
-2. **Foundation for Deep Learning**
-   - Train/test split used in all ML (including LLM fine-tuning)
-   - Metrics crucial for evaluating AI models
-   - Scikit-learn patterns similar to HuggingFace/PyTorch
+   2. **Foundation for Deep Learning**
+      - Train/test split used in all ML (including LLM fine-tuning)
+      - Metrics crucial for evaluating AI models
+      - Scikit-learn patterns similar to HuggingFace/PyTorch
 
-3. **Portfolio Advantage**
-   - Shows broader AI knowledge, not just LLMs
-   - Fraud detection example = domain expertise
+   3. **Portfolio Advantage**
+      - Shows broader AI knowledge, not just LLMs
+      - Fraud detection example = domain expertise
 
-4. **Interview Preparation**
-   - Can answer: "How do you evaluate a model?"
-   - Can explain train/test split
-   - Can build a simple classifier
+   4. **Interview Preparation**
+      - Can answer: "How do you evaluate a model?"
+      - Can explain train/test split
+      - Can build a simple classifier
 
 ### Preparation for Day7
 
-**Before Saturday, Install:**
-```bash
-pip install numpy pandas scikit-learn jupyter matplotlib seaborn
-```
+   **Before Saturday, Install:**
+   ```bash
+   pip install numpy pandas scikit-learn jupyter matplotlib seaborn
+   ```
 
-**Download Dataset:**
-- Kaggle: "Credit Card Fraud Detection"
-- Link: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+   **Download Dataset:**
+   - Kaggle: "Credit Card Fraud Detection"
+   - Link: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
 
-**Have Ready:**
-- Jupyter notebook running
-- Clean workspace
-- 4 hours of focused time
+   **Have Ready:**
+   - Jupyter notebook running
+   - Clean workspace
+   - 4 hours of focused time
 
 ---
 
@@ -702,19 +703,19 @@ pip install numpy pandas scikit-learn jupyter matplotlib seaborn
 
 ## Success Metrics
 
-### By End of Week 1
+   ### By End of Week 1
 
-You should be able to:
+   You should be able to:
 
-- ✅ Explain vectors and matrices with examples
-- ✅ Apply conditional probability to real problems
-- ✅ Understand distributions and their importance
-- ✅ Manipulate arrays with NumPy confidently
-- ✅ Build and evaluate a simple ML classifier
-- ✅ Analyze data with Pandas
-- ✅ See connections between math concepts and AI applications
+   - ✅ Explain vectors and matrices with examples
+   - ✅ Apply conditional probability to real problems
+   - ✅ Understand distributions and their importance
+   - ✅ Manipulate arrays with NumPy confidently
+   - ✅ Build and evaluate a simple ML classifier
+   - ✅ Analyze data with Pandas
+   - ✅ See connections between math concepts and AI applications
 
-### You do NOT need to:
+   ### You do NOT need to:
 
 - ❌ Memorize all formulas
 - ❌ Be an expert in any single topic
@@ -725,15 +726,15 @@ You should be able to:
 
 ## Tips for Success
 
-### General Advice
+   ### General Advice
 
-1. **Don't Rush**: Understanding > Speed
-2. **Practice by Hand**: Write out examples on paper
-3. **Ask Questions**: Write down what's unclear
-4. **Connect Concepts**: How does this relate to AI/ML?
-5. **Take Breaks**: Pomodoro technique (25 min work, 5 min break)
+   1. **Don't Rush**: Understanding > Speed
+   2. **Practice by Hand**: Write out examples on paper
+   3. **Ask Questions**: Write down what's unclear
+   4. **Connect Concepts**: How does this relate to AI/ML?
+   5. **Take Breaks**: Pomodoro technique (25 min work, 5 min break)
 
-### If You Get Stuck
+   ### If You Get Stuck
 
 **Videos too fast:**
 - Watch at 0.75x speed
