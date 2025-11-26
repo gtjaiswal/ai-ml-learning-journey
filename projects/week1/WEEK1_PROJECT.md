@@ -1,820 +1,376 @@
-## Day 7: Scikit-learn & Fraud Detection Project
-
-### Day Overview
-
-Learn scikit-learn fundamentals in the morning, then apply them to build a complete fraud detection classifier in the afternoon.
-
-**Total Time:** 3 hours
-
-### Day7's Schedule (3 hours total)
-
-**Hour 1:** Scikit-learn Fundamentals (60 min)
-- What is scikit-learn?
-- ML workflow overview
-- Train/test split concept
-- Simple classifier example
-- Understanding metrics
-
-**Hour 2:** Fraud Detection Project - Part 1 (60 min)
-- Load and prepare fraud dataset
-- Train classifier
-- Make predictions
-
-**Hour 3:** Fraud Detection Project - Part 2 (60 min)
-- Evaluate model performance
-- Try improvements
-- Document findings
+## **📋 CREDIT CARD DEFAULT PREDICTION - PROJECT REQUIREMENTS**
 
 ---
 
-### HOUR 1: Scikit-learn Fundamentals
+## **PROJECT GOAL**
 
-#### Introduction to Scikit-learn
-
-**What is Scikit-learn?**
-- Python library for machine learning
-- Built on NumPy, SciPy, and matplotlib
-- Provides simple, efficient tools for data analysis
-- Consistent API across different algorithms
-
-**Key Features:**
-- Classification (fraud detection, spam filtering)
-- Regression (price prediction, forecasting)
-- Clustering (customer segmentation)
-- Dimensionality reduction
-- Model evaluation tools
-
-**Installation:**
-```bash
-pip install scikit-learn
-```
+Build a machine learning model to predict which credit card customers will default on their next payment using real banking data.
 
 ---
 
-#### The Machine Learning Workflow
+## **DATASET**
 
-**5 Core Steps:**
+**Source:** UCI Machine Learning Repository - "Default of Credit Card Clients"
 
-**1. Prepare Data**
-- Load dataset
-- Clean data (handle missing values)
-- Split features (X) from target (y)
-- Split into train and test sets
+**Download Links:**
+- Main page: https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients
+- Direct download: https://archive.ics.uci.edu/ml/machine-learning-databases/00350/default%20of%20credit%20card%20clients.xls
 
-**2. Choose Model**
-- Classification vs Regression
-- Select appropriate algorithm
-- Logistic Regression, Random Forest, etc.
-
-**3. Train Model**
-- Model learns patterns from training data
-- Adjusts internal parameters
-- Minimizes prediction errors
-
-**4. Make Predictions**
-- Use trained model on new data
-- Get predictions for test set
-
-**5. Evaluate Performance**
-- Compare predictions to actual values
-- Calculate metrics (accuracy, precision, recall)
-- Decide if model is good enough
+**Format:** Excel file (.xls)
+**Size:** 30,000 customer records
+**Note:** Skip the first row when loading (it's a description row)
 
 ---
 
-#### Understanding Train/Test Split
+## **PHASE 1: DATA LOADING & EXPLORATION (30 minutes)**
 
-**Why Split Data?**
+### **Requirements:**
 
-**Problem:** If we test on same data we trained on:
-- Model memorizes answers (overfitting)
-- Looks perfect but fails on new data
-- Like studying only exam questions
+**1.1 Load the Dataset**
+- Load Excel file using pandas
+- Skip first row (header is in row 2)
+- Remove first column (ID column)
 
-**Solution:** Hold out some data for testing
-- Train on 80% of data
-- Test on remaining 20%
-- Test set simulates "new unseen data"
+**1.2 Initial Exploration**
+- Display first 5 rows
+- Display last 5 rows
+- Show dataset shape (rows, columns)
+- Display all column names
+- Show data types of each column
 
-**Key Rules:**
-- Never use test data during training
-- Split randomly to avoid bias
-- Use random_state for reproducibility
+**1.3 Statistical Summary**
+- Get summary statistics for all numerical columns
+- Show count, mean, std, min, 25%, 50%, 75%, max
 
-**Resources:**
-- Train-test split guide: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
-- Cross-validation (advanced): https://scikit-learn.org/stable/modules/cross_validation.html
+**1.4 Missing Values Check**
+- Check for missing values in each column
+- Display count of missing values per column
+- Calculate percentage of missing values
 
----
+**1.5 Target Variable Analysis**
+- Count how many defaults vs non-defaults
+- Calculate default rate (percentage)
+- Create a bar chart showing distribution
 
-#### Simple Classification Example
-
-**Task: Build your first classifier (15 min)**
-
-**Dataset: Iris Flowers**
-- Famous beginner dataset
-- 150 samples, 4 features
-- 3 flower species to classify
-- Built into scikit-learn
-
-**Steps:**
-
-**1. Load the data**
-- Import iris dataset
-- Explore features and target
-- Understand data shape
-
-**2. Split train/test**
-- 80/20 split
-- random_state=42
-
-**3. Train classifier**
-- Use LogisticRegression
-- Call .fit() on training data
-
-**4. Make predictions**
-- Use .predict() on test data
-
-**5. Check accuracy**
-- Compare predictions to actual
-- Calculate accuracy score
-
-**What to figure out:**
-- How to load built-in datasets
-- What X and y represent
-- How to use train_test_split
-- What .fit() does
-- What .predict() returns
-- How to calculate accuracy
-
-**Expected outcome:**
-- Accuracy around 95%+
-- Understanding of basic workflow
-- Confidence with scikit-learn API
+**Deliverable:** Written summary answering:
+- How many customers are in the dataset?
+- How many features are available?
+- What's the default rate?
+- Are there any missing values?
+- Is the dataset balanced or imbalanced?
 
 ---
 
-#### Understanding Evaluation Metrics
+## **PHASE 2: FEATURE ENGINEERING (30 minutes)**
 
-**Accuracy**
-- What percentage did we get right?
-- Formula: Correct predictions / Total predictions
-- Good starting point
-- **Problem:** Misleading with imbalanced data
+### **Requirements:**
 
-**Example:**
-- 100 transactions: 95 legitimate, 5 fraud
-- Model predicts "not fraud" for everything
-- Accuracy = 95%! (Looks great!)
-- But caught 0 fraud! (Actually terrible!)
+Create 5 new features based on banking domain knowledge:
 
-**Better Metrics for Classification:**
+**2.1 Payment Trend Feature**
+- Calculate: Most recent payment status MINUS oldest payment status
+- Name: `payment_trend`
+- Purpose: Did payment behavior get worse (positive) or better (negative)?
+- Use columns: PAY_0 and PAY_6
 
-**Precision**
-- Of predicted positives, how many were correct?
-- Formula: True Positives / (True Positives + False Positives)
-- "When I say fraud, am I usually right?"
+**2.2 Bill Amount Volatility Feature**
+- Calculate: Standard deviation across all 6 monthly bill amounts
+- Name: `bill_volatility`
+- Purpose: How unstable is their spending?
+- Use columns: BILL_AMT1 through BILL_AMT6
 
-**Recall (Sensitivity)**
-- Of actual positives, how many did we catch?
-- Formula: True Positives / (True Positives + False Negatives)
-- "Of all actual fraud, what % did I catch?"
+**2.3 Payment Ratio Feature**
+- Calculate: Most recent payment amount divided by most recent bill amount
+- Name: `payment_ratio`
+- Purpose: Are they paying off their bills?
+- Use columns: PAY_AMT1 and BILL_AMT1
+- Handle division by zero (add 1 to denominator)
 
-**F1-Score**
-- Harmonic mean of precision and recall
-- Balances both metrics
-- Good single number for imbalanced data
+**2.4 Credit Utilization Feature**
+- Calculate: Most recent bill amount divided by credit limit
+- Name: `utilization`
+- Purpose: How much of credit limit are they using?
+- Use columns: BILL_AMT1 and LIMIT_BAL
 
-**Confusion Matrix**
-- Shows all four outcomes
-- True Positives, True Negatives
-- False Positives, False Negatives
-- Visual way to understand errors
+**2.5 Number of Delays Feature**
+- Calculate: Count how many months had payment delays (value > 0)
+- Name: `num_delays`
+- Purpose: Pattern of consistent delays
+- Use columns: PAY_0, PAY_2, PAY_3, PAY_4, PAY_5, PAY_6
 
-**For Fraud Detection:**
-- Recall is CRITICAL (must catch fraud!)
-- Some false positives acceptable
-- Missing fraud is very costly
-- F1-Score good overall metric
+**Verification:**
+- Display first 10 rows of new features
+- Check for any infinite values
+- Check for any NaN values created
+- Show min and max values of each new feature
 
-**Resources:**
-- Metrics guide: https://scikit-learn.org/stable/modules/model_evaluation.html
-- Choosing metrics: https://machinelearningmastery.com/classification-accuracy-is-not-enough-more-performance-measures-you-can-use/
+**Deliverable:** Brief explanation of why each feature might predict default
 
 ---
 
-#### Video Resources
+## **PHASE 3: DATA PREPARATION (20 minutes)**
 
-**Video: "Scikit-learn Crash Course"**
-- Link: https://www.youtube.com/watch?v=0B5eIE_1vpU
-- Duration: 30:00
-- Watch first 15-20 minutes
-- Covers train/test split, basic classification
+### **Requirements:**
 
-**Video: "Machine Learning with Scikit-learn"**
-- Link: https://www.youtube.com/watch?v=pqNCD_5r0IU
-- Duration: 10:00
-- Quick overview of workflow
+**3.1 Feature Selection**
+Select exactly these 12 features for the model:
+- LIMIT_BAL (credit limit)
+- AGE (customer age)
+- PAY_0 (most recent payment status)
+- PAY_2 (payment status 2 months ago)
+- PAY_3 (payment status 3 months ago)
+- BILL_AMT1 (most recent bill)
+- PAY_AMT1 (most recent payment)
+- payment_trend (your engineered feature)
+- bill_volatility (your engineered feature)
+- payment_ratio (your engineered feature)
+- utilization (your engineered feature)
+- num_delays (your engineered feature)
 
----
+**3.2 Create Feature Matrix (X)**
+- Extract the 12 selected features into matrix X
+- Display shape of X
 
-#### Reading Materials
+**3.3 Create Target Variable (y)**
+- Extract the target column: 'default.payment.next.month'
+- Display shape of y
+- Verify values are only 0 and 1
 
-**Official Scikit-learn Tutorial**
-- Link: https://scikit-learn.org/stable/tutorial/basic/tutorial.html
-- Duration: 20 min read
-- Covers fundamentals with examples
+**3.4 Handle Any Issues**
+- Replace any infinite values with NaN
+- Fill NaN values with median of that column
+- Verify no missing values remain
 
-**Article: "A Gentle Introduction to Scikit-learn"**
-- Link: https://machinelearningmastery.com/a-gentle-introduction-to-scikit-learn-a-python-machine-learning-library/
-- Duration: 15 min read
+**3.5 Train-Test Split**
+- Split data: 80% training, 20% testing
+- Use random_state=42 for reproducibility
+- Use stratify on target variable (keeps same default rate in both sets)
+- Display shapes of: X_train, X_test, y_train, y_test
+- Display default rate in training set
+- Display default rate in test set
 
----
-
-#### Practice Exercise
-
-**Build Iris Classifier (20 min)**
-
-**Requirements:**
-- Load iris dataset
-- Split into train/test (80/20)
-- Train LogisticRegression model
-- Predict on test set
-- Calculate accuracy
-- Print classification report
-- Create confusion matrix
-
-**Success criteria:**
-- Accuracy > 90%
-- Understand each step
-- Can explain what happened
-- Code runs without errors
-
-**What to observe:**
-- Training is fast (milliseconds)
-- Predictions are instant
-- Model performs well
-- Metrics make sense
+**Deliverable:** Confirmation that:
+- Training set has ~24,000 samples
+- Test set has ~6,000 samples
+- Default rates match in both sets
+- No missing values in any set
 
 ---
 
-### HOUR 2: Fraud Detection Project - Part 1
+## **PHASE 4: MODEL TRAINING (20 minutes)**
 
-#### Project Setup
+### **Requirements:**
 
-**Goal:** Build a fraud detection classifier using real transaction data
+**4.1 Feature Scaling**
+- Create StandardScaler
+- Fit scaler on X_train only
+- Transform X_train using fitted scaler
+- Transform X_test using same scaler (do not fit again!)
+- Verify scaled data has mean ~0 and std ~1
 
-**What you'll learn:**
-- Working with imbalanced data
-- Feature preparation
-- Model training on real problem
-- Handling real-world challenges
+**4.2 Model Training**
+- Create Logistic Regression model with:
+  - class_weight='balanced' (handles imbalanced data)
+  - random_state=42
+  - max_iter=1000
+- Train model on scaled training data
+- Display confirmation that training completed
 
----
+**4.3 Generate Predictions**
+- Predict on scaled test set (binary predictions: 0 or 1)
+- Get probability predictions on scaled test set (probabilities: 0.0 to 1.0)
+- Display first 10 predictions alongside actual values
+- Display first 10 probability predictions
 
-#### Task 1: Get Dataset (10 min)
-
-**Option A: Kaggle Credit Card Fraud Detection**
-- Link: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
-- Most popular fraud dataset
-- Real anonymized transactions
-- Highly imbalanced (0.17% fraud)
-
-**Option B: Synthetic Transaction Data**
-- Create fake transactions if Kaggle unavailable
-- Use pandas to generate
-- Add fraud labels manually
-
-**Dataset Requirements:**
-- At least 1000 transactions
-- Multiple features (amount, time, merchant, etc.)
-- Binary fraud label (0=legitimate, 1=fraud)
-- Imbalanced (more legitimate than fraud)
-
-**Download and save:**
-- Save as `transactions.csv`
-- Place in project folder
-- Verify file loads correctly
+**Deliverable:** 
+- Trained model object
+- Test set predictions (binary)
+- Test set probabilities
 
 ---
 
-#### Task 2: Load and Explore (15 min)
+## **PHASE 5: MODEL EVALUATION (40 minutes)**
 
-**Requirements:**
+### **Requirements:**
 
-**Load the data:**
-- Use pandas read_csv
-- Display first 10 rows
-- Check data shape
-- Inspect column names and types
+**5.1 Confusion Matrix**
+- Calculate confusion matrix
+- Display as 2x2 matrix showing:
+  - True Negatives (top-left)
+  - False Positives (top-right)
+  - False Negatives (bottom-left)
+  - True Positives (bottom-right)
+- Create visualization (heatmap) of confusion matrix
+- Label axes clearly (Actual vs Predicted)
 
-**Exploratory questions to answer:**
-- How many total transactions?
-- How many features?
-- How many fraudulent transactions?
-- What's the fraud rate (%)?
-- Any missing values?
-- What's the range of transaction amounts?
+**5.2 Classification Report**
+- Generate full classification report showing:
+  - Precision for each class
+  - Recall for each class
+  - F1-score for each class
+  - Support for each class
 
-**Data quality checks:**
-- Check for nulls: .isnull().sum()
-- Check for duplicates
-- Check data types: .dtypes
-- Get summary statistics: .describe()
+**5.3 Manual Metric Calculation**
+Extract from confusion matrix:
+- True Positives (TP)
+- False Negatives (FN)
+- False Positives (FP)
+- True Negatives (TN)
 
-**What to figure out:**
-- Is this imbalanced data? (Yes!)
-- What does imbalanced mean for modeling?
-- Which features might be useful?
-- Any obvious data issues?
+Calculate manually:
+- Recall = TP / (TP + FN)
+- Precision = TP / (TP + FP)
+- Accuracy = (TP + TN) / Total
 
-**Expected findings:**
-- Fraud rate likely 0.1% - 1%
-- Highly imbalanced dataset
-- This is realistic for fraud detection
-- Will affect evaluation strategy
+Display in business terms:
+- "We caught X% of all defaults" (recall)
+- "X% of our alerts were correct" (precision)
+- "We missed X defaults" (false negatives)
+- "We had X false alarms" (false positives)
 
----
+**5.4 Model Performance Analysis**
+Answer these questions:
+- Is recall high enough to catch most defaults?
+- Is precision acceptable (too many false alarms)?
+- Which error is more costly: missing a default (FN) or false alarm (FP)?
+- Would you recommend this model for production use?
 
-#### Task 3: Data Preparation (20 min)
-
-**Clean the data:**
-
-**Handle missing values:**
-- Check each column for nulls
-- Decide: drop or fill?
-- For amounts: might fill with median
-- For categories: might fill with "Unknown"
-- Or drop rows if few missing
-
-**Remove unnecessary columns:**
-- Transaction IDs (not useful for prediction)
-- Timestamps (for now - could engineer features later)
-- Any columns that are all same value
-- Keep: amount, merchant info, fraud label
-
-**Separate features and target:**
-- X = all columns except fraud label
-- y = fraud label only
-- Verify shapes match
-
-**Handle categorical variables (if any):**
-- If you have merchant names, categories, etc.
-- For now, might drop them
-- Or use simple encoding (0, 1, 2...)
-- Advanced: one-hot encoding (optional)
-
-**What to figure out:**
-- What makes a good feature?
-- When to drop vs transform?
-- How to handle categorical data?
-- Feature engineering opportunities
+**Deliverable:** 
+- Confusion matrix visualization
+- Classification report
+- Written analysis (3-5 sentences) on model performance
+- Recommendation: Deploy or improve?
 
 ---
 
-#### Task 4: Train/Test Split (5 min)
+## **PHASE 6: BUSINESS INSIGHTS (20 minutes)**
 
-**Requirements:**
+### **Requirements:**
 
-**Split the data:**
-- 80% training, 20% testing
-- Use train_test_split from sklearn
-- Set random_state=42 for reproducibility
-- Stratify by fraud label (important!)
+**6.1 Feature Importance Analysis**
+- Extract model coefficients
+- Match coefficients to feature names
+- Sort features by absolute coefficient value (highest to lowest)
+- Display top 10 most important features
+- Create horizontal bar chart showing top 10 features
 
-**Why stratify?**
-- Ensures both sets have similar fraud rates
-- With rare events, random split might put all fraud in one set
-- Stratify maintains class balance
+**6.2 Business Impact Calculation**
+Assumptions:
+- Average loss per default = $5,000
+- Test set represents one month of customers
 
-**Verify split:**
-- Check shapes of train and test sets
-- Calculate fraud rate in each
-- Should be similar (e.g., both ~0.5%)
+Calculate:
+- Total defaults in test set
+- Defaults caught by model (True Positives)
+- Defaults missed by model (False Negatives)
+- Money saved = Defaults caught × $5,000
+- Money lost = Defaults missed × $5,000
+- Net impact = Money saved - Money lost
 
-**What to figure out:**
-- How to use stratify parameter
-- Why it matters for imbalanced data
-- How to verify split worked correctly
+Display as a business report
 
----
+**6.3 Threshold Analysis**
+For each threshold [0.3, 0.4, 0.5, 0.6, 0.7]:
+- Predict using that probability threshold
+- Calculate confusion matrix
+- Calculate recall and precision
+- Calculate missed defaults (FN)
+- Display in table format
 
-#### Task 5: Feature Scaling (10 min)
+**6.4 Recommendations**
+Write recommendations addressing:
+- Which threshold should the bank use and why?
+- Which customers should be flagged for intervention?
+- Which features are strongest predictors (top 3)?
+- What actions should bank take with high-risk customers?
+- What's the estimated monthly value of this model?
 
-**Why scale features?**
-
-**Problem:**
-- Transaction amount: $1 to $10,000
-- Hour of day: 0 to 23
-- Features on very different scales
-
-**Impact:**
-- Some algorithms sensitive to scale
-- Large values dominate small values
-- Model performs poorly
-
-**Solution: StandardScaler**
-- Transforms each feature
-- Mean = 0, Standard deviation = 1
-- All features on similar scale
-
-**Important: Fit on train only!**
-- Fit scaler on training data
-- Transform both train and test
-- Prevents data leakage
-- Test set represents "future unseen data"
-
-**What to figure out:**
-- How to use StandardScaler
-- Why fit_transform for train
-- Why only transform for test
-- When scaling is necessary
-
-**Note:** Tree-based models (Random Forest) don't need scaling, but Logistic Regression does.
+**Deliverable:**
+- Feature importance chart
+- Business impact summary ($$ saved/lost)
+- Threshold comparison table
+- Written recommendations (5-7 bullet points)
 
 ---
 
-### HOUR 3: Fraud Detection Project - Part 2
+## **FINAL DELIVERABLES**
 
-#### Task 1: Train Classifier (15 min)
+### **Required Outputs:**
 
-**Choose your algorithm:**
+**1. Jupyter Notebook** containing:
+- All code with clear markdown explanations
+- All visualizations (confusion matrix, feature importance)
+- Analysis and insights as markdown cells
 
-**Option 1: Logistic Regression (Recommended)**
-- Simple and interpretable
-- Good baseline model
-- Fast training
-- Works well with scaled features
+**2. Summary Document** (markdown or text) answering:
+- What problem did you solve?
+- What was your approach?
+- What were the key findings?
+- What features matter most?
+- What's your recommendation?
+- What's the business value?
 
-**Option 2: Random Forest**
-- More powerful
-- Handles non-linear patterns
-- Doesn't need feature scaling
-- Takes longer to train
-
-**Try both if time allows!**
-
-**Training steps:**
-
-**For Logistic Regression:**
-- Import LogisticRegression
-- Create instance
-- Important: Set class_weight='balanced'
-- Fit on training data
-- Training completes in seconds
-
-**For Random Forest:**
-- Import RandomForestClassifier
-- Set n_estimators (100 is good start)
-- Set class_weight='balanced'
-- Fit on training data
-- May take longer than Logistic Regression
-
-**Why class_weight='balanced'?**
-- Handles imbalanced data
-- Gives more weight to rare class (fraud)
-- Helps model learn from minority examples
-- Critical for fraud detection
-
-**What to observe:**
-- Training time
-- Any warnings or errors
-- Model learns patterns from training data
-- Gradient descent happening (Logistic Regression)
-
-**What to figure out:**
-- What happens during .fit()?
-- How does model learn patterns?
-- What are model parameters?
-- How long does training take?
+**3. Results Summary:**
+- Final model recall: ___%
+- Final model precision: ___%
+- Recommended threshold: ___
+- Top 3 predictive features: ___, ___, ___
+- Estimated monthly savings: $___
+- Number of customers to flag: ___
 
 ---
 
-#### Task 2: Make Predictions (10 min)
+## **SUCCESS CRITERIA**
 
-**Make predictions on test set:**
+You've successfully completed this project if:
 
-**Get predicted labels:**
-- Use .predict() on test features
-- Returns 0 or 1 for each transaction
-- These are "hard" predictions
-
-**Get prediction probabilities:**
-- Use .predict_proba() on test features
-- Returns probability for each class
-- Probability of fraud (second column)
-- Useful for setting custom thresholds
-
-**What to figure out:**
-- Difference between .predict() and .predict_proba()
-- How to interpret probabilities
-- When to use each method
-- How to set custom thresholds
-
-**Example:**
-- Model predicts probability = 0.7 (70% fraud)
-- Default threshold = 0.5
-- Since 0.7 > 0.5, predict fraud (1)
-- Could adjust threshold for more/fewer alerts
+✅ Model achieves recall > 50% (catching at least half of defaults)
+✅ You can explain confusion matrix in business terms
+✅ You can identify top 3 most important features
+✅ You can recommend a threshold with business justification
+✅ You can calculate ROI/business impact
+✅ You can explain the project in a 2-minute interview answer
 
 ---
 
-#### Task 3: Evaluate Performance (25 min)
+## **INTERVIEW PREPARATION**
 
-**Calculate metrics:**
+Prepare to answer:
 
-**Accuracy:**
-- Simple: correct / total
-- Expected: Very high (95%+)
-- Why? Because most transactions are legitimate
-- **Don't rely on accuracy alone!**
+**Q1:** "Walk me through this project"
+- 2-3 minute summary covering problem, approach, results
 
-**Confusion Matrix:**
-- True Negatives: Correctly identified legitimate
-- False Positives: Wrongly flagged as fraud (false alarm)
-- False Negatives: Missed fraud (dangerous!)
-- True Positives: Correctly caught fraud
+**Q2:** "Why did you choose these features?"
+- Explain domain knowledge reasoning
 
-**Precision:**
-- Of flagged transactions, how many were actually fraud?
-- Low precision = too many false alarms
-- Annoys customers with unnecessary blocks
+**Q3:** "What's precision vs recall?"
+- Define both and explain which matters more for defaults
 
-**Recall:**
-- Of actual fraud, what percentage did we catch?
-- **Most important metric for fraud!**
-- Low recall = missing fraud = losing money
+**Q4:** "What would you improve?"
+- Discuss: more features, different models, threshold tuning, cost-sensitive learning
 
-**F1-Score:**
-- Balance of precision and recall
-- Good single metric for imbalanced data
-- Higher is better
-
-**Classification Report:**
-- Shows all metrics together
-- Breakdown by class (legitimate and fraud)
-- Overall accuracy
-
-**What to figure out:**
-- How to interpret confusion matrix
-- Which metric matters most for fraud?
-- Tradeoff between precision and recall
-- What's acceptable performance?
-
-**Realistic expectations:**
-- Recall: 60-80% (catching most fraud)
-- Precision: 10-30% (lots of false alarms OK for fraud)
-- Accuracy: 95%+ (due to class imbalance)
-- F1-Score: 0.3-0.5 (typical for fraud detection)
-
-**Why low precision is OK:**
-- Better to review 10 false alarms
-- Than miss 1 real fraud
-- Human review can filter false positives
-- Cost of missing fraud >> cost of false alarm
+**Q5:** "What's the business value?"
+- Quote your money saved calculation
 
 ---
 
-#### Task 4: Analyze Results (10 min)
+## **TIME ALLOCATION**
 
-**Detailed analysis:**
+- Phase 1 (Exploration): 30 min ⏰
+- Phase 2 (Feature Engineering): 30 min ⏰
+- Phase 3 (Preparation): 20 min ⏰
+- Phase 4 (Training): 20 min ⏰
+- Phase 5 (Evaluation): 40 min ⏰
+- Phase 6 (Business Insights): 20 min ⏰
+- Documentation: 20 min ⏰
 
-**Look at predictions:**
-- How many transactions flagged as fraud?
-- What's the alert rate?
-- Is it realistic? (Should be low, like 1-3%)
-
-**Examine false positives:**
-- What legitimate transactions were flagged?
-- Any patterns? (High amounts? Unusual merchants?)
-- Could features be improved?
-
-**Examine false negatives:**
-- What fraud did we miss?
-- Were they unusual cases?
-- Any patterns to missed fraud?
-
-**Feature importance (if using Random Forest):**
-- Which features were most useful?
-- Does it make sense?
-- Amount often most important
-
-**What to figure out:**
-- Where is model strong?
-- Where does it fail?
-- What could improve performance?
-- Is model ready for production?
+**Total: 3 hours**
 
 ---
 
-#### Task 5: Try Improvements (Optional, if time)
+## **OPTIONAL EXTENSIONS (If Time Permits)**
 
-**Ideas to try:**
-
-**1. Adjust decision threshold:**
-- Default is 0.5
-- Lower to 0.3 → More alerts, better recall
-- Raise to 0.7 → Fewer alerts, better precision
-- Find optimal tradeoff
-
-**2. Try different algorithm:**
-- If used Logistic Regression, try Random Forest
-- If used Random Forest, try Logistic Regression
-- Compare results
-
-**3. Feature engineering:**
-- Create amount bins (small, medium, large)
-- Add hour of day if timestamps available
-- Interaction features (amount × merchant_type)
-
-**4. Handle imbalance differently:**
-- Try different class_weight values
-- Use SMOTE for oversampling (advanced)
-- Undersample majority class
-
-**5. Ensemble methods:**
-- Combine multiple models
-- Average their predictions
-- Often improves performance
-
-**What to figure out:**
-- What changes help vs hurt?
-- Why might certain approaches work better?
-- What's practical for production?
-
----
-
-### Day7 Deliverables
-
-**Scikit-learn Fundamentals:**
-- ✅ Understand ML workflow (5 steps)
-- ✅ Know train/test split purpose
-- ✅ Built simple iris classifier
-- ✅ Understand evaluation metrics
-- ✅ Can use scikit-learn API
-
-**Fraud Detection Project:**
-- ✅ Loaded and explored fraud dataset
-- ✅ Cleaned and prepared data
-- ✅ Handled imbalanced data
-- ✅ Split into train/test sets
-- ✅ Scaled features appropriately
-- ✅ Trained classifier with class_weight
-- ✅ Made predictions on test set
-- ✅ Evaluated with appropriate metrics
-
-**Understanding:**
-- ✅ Why accuracy is misleading for imbalanced data
-- ✅ Why recall is critical for fraud detection
-- ✅ What confusion matrix tells us
-- ✅ How to interpret precision/recall tradeoff
-- ✅ What "training" means
-- ✅ Why we split train/test
-
-**Jupyter Notebook:**
-- ✅ Complete workflow documented
-- ✅ Code well-commented
-- ✅ Results clearly presented
-- ✅ Insights and analysis included
-- ✅ Next steps identified
-
----
-
-### Key Insights
-
-**About Fraud Detection:**
-- Highly imbalanced problem (realistic!)
-- Accuracy is misleading metric
-- Recall more important than precision
-- False positives acceptable, false negatives costly
-- Real-world fraud detection is similar but more complex
-
-**About Machine Learning:**
-- Quality of data matters most
-- Feature engineering is crucial
-- Simple models often work well
-- Evaluation is as important as training
-- Production requires ongoing monitoring
-
-**About Scikit-learn:**
-- Consistent API across algorithms
-- Easy to try different approaches
-- Built-in tools for common tasks
-- Great documentation and examples
-- Industry standard for classical ML
-
----
-
-### Connection to Future Learning
-
-**Week 2 (APIs & FastAPI):**
-- Wrap this classifier in API
-- POST transaction → GET fraud score
-- Real-time fraud detection endpoint
-
-**Week 3 (LLMs):**
-- Use LLM to extract features from transaction text
-- "Coffee at Starbucks $5.50" → structured features
-- Combine LLM + Classifier for powerful system
-
-**Production Deployment:**
-- This workflow is foundation
-- Add database for transactions
-- Add monitoring and alerting
-- A/B test different models
-- Retrain periodically with new data
-
----
-
-### Troubleshooting Guide
-
-**Issue: Very low recall (catching no fraud)**
-- Check class_weight='balanced' is set
-- Try adjusting decision threshold lower
-- Verify train/test split was stratified
-- Check if enough fraud examples in training
-
-**Issue: Model predicts everything as not-fraud**
-- Extreme class imbalance
-- Ensure class_weight='balanced'
-- Try SMOTE or undersampling
-- Try different algorithm (Random Forest)
-
-**Issue: High training time**
-- Random Forest with many trees takes time
-- Reduce n_estimators (try 50 instead of 100)
-- Use Logistic Regression instead
-- Reduce dataset size for testing
-
-**Issue: ImportError or ModuleNotFoundError**
-- Ensure scikit-learn installed: pip install scikit-learn
-- Check version: sklearn.__version__
-- Restart Jupyter kernel
-
-**Issue: Poor performance across all metrics**
-- Check data quality
-- Verify features are meaningful
-- Check for data leakage
-- Try different features
-- May need feature engineering
-
----
-
-### Resources
-
-**Scikit-learn Documentation:**
-- Main docs: https://scikit-learn.org/stable/
-- User guide: https://scikit-learn.org/stable/user_guide.html
-- Tutorials: https://scikit-learn.org/stable/tutorial/index.html
-- API reference: https://scikit-learn.org/stable/modules/classes.html
-
-**Imbalanced Data:**
-- imbalanced-learn library: https://imbalanced-learn.org/
-- Techniques guide: https://machinelearningmastery.com/tactics-to-combat-imbalanced-classes-in-your-machine-learning-dataset/
-
-**Evaluation Metrics:**
-- Metrics guide: https://scikit-learn.org/stable/modules/model_evaluation.html
-- Understanding metrics: https://machinelearningmastery.com/classification-accuracy-is-not-enough-more-performance-measures-you-can-use/
-
-**Fraud Detection:**
-- Kaggle fraud detection competitions
-- Real-world case studies
-- Research papers on fraud ML
-
----
-
-### Final Checklist
-
-**Morning (Hour 1):**
-- [ ] Watched scikit-learn tutorial video
-- [ ] Read introduction documentation
-- [ ] Understand ML workflow
-- [ ] Built iris classifier example
-- [ ] Understand train/test split
-- [ ] Know basic evaluation metrics
-
-**Afternoon (Hours 2-3):**
-- [ ] Loaded fraud detection dataset
-- [ ] Explored data (shape, fraud rate, features)
-- [ ] Cleaned data (handled nulls, removed unnecessary columns)
-- [ ] Separated features (X) and target (y)
-- [ ] Split train/test with stratification
-- [ ] Scaled features with StandardScaler
-- [ ] Trained classifier with class_weight='balanced'
-- [ ] Made predictions on test set
-- [ ] Calculated all metrics (accuracy, precision, recall, F1)
-- [ ] Created confusion matrix
-- [ ] Analyzed results and identified strengths/weaknesses
-- [ ] Tried at least one improvement
-- [ ] Documented findings in notebook
-
-**Understanding:**
-- [ ] Can explain entire ML workflow
-- [ ] Know why train/test split matters
-- [ ] Understand imbalanced data challenges
-- [ ] Know which metrics matter for fraud
-- [ ] Can interpret confusion matrix
-- [ ] Understand precision/recall tradeoff
-- [ ] Ready to build more ML models
-
-**Ready for Week 2!**
+- Create visualizations of feature distributions (default vs non-default)
+- Analyze which demographics default most
+- Compare performance across different age groups
+- Create a "risk score" formula based on top 3 features
