@@ -542,99 +542,129 @@ A comprehensive 7-day learning plan covering gradient descent, loss functions, R
 
    ### Hands-On Exercises
 
-   **Exercise 1: Basic GET Request**
+  **Exercise 1: Basic GET Request**
 
-   **Requirements:**
-   - Make GET request to CoinDesk API: `https://api.coindesk.com/v1/bpi/currentprice.json`
-   - Parse JSON response
-   - Extract Bitcoin price in USD
-   - Print formatted message: "Current Bitcoin Price: $X"
+### Requirements
 
-   **What to figure out:**
-   - Import requests library
-   - Make GET request
-   - Parse JSON
-   - Navigate nested dictionaries
-   - Format output
+-   Make GET request to CoinGecko API:\
+    `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`
+-   Parse JSON response
+-   Extract Bitcoin price in USD
+-   Print formatted message: **"Current Bitcoin Price: \$X,XXX.XX"**
 
-   **Success criteria:**
-   - Status 200
-   - JSON parsed correctly
-   - Price extracted
-   - No errors
+### What to Figure Out
 
-   ---
+-   Import `requests`
+-   Make GET request
+-   Parse JSON
+-   Navigate dictionaries
+-   Format output
 
-   **Exercise 2: Error Handling**
+### Success Criteria
 
-   **Requirements:**
-   - Try invalid URL: `https://api.coindesk.com/v1/invalid`
-   - Handle network errors
-   - Handle HTTP errors (404, 500)
-   - Handle JSON parsing errors
-   - Handle timeouts
-   - Print user-friendly messages
-   - Program shouldn't crash
+-   Status 200
+-   JSON parsed
+-   Correct path
+-   No errors
+-   Clean output
 
-   **What to figure out:**
-   - try/except blocks
-   - Check status codes
-   - Catch different exceptions
-   - Meaningful error messages
+## Exercise 2: Error Handling
 
-   **Test scenarios:**
-   - Invalid URL
-   - Non-existent endpoint
-   - Disconnect internet
+### Requirements
 
-   ---
+-   Invalid URL test\
+    `https://api.coingecko.com/v3/invalid-endpoint`
+-   Handle:
+    -   Connection errors\
+    -   HTTP errors\
+    -   JSON errors\
+    -   Timeout errors
+-   Graceful user-friendly errors
 
-   **Exercise 3: POST Request**
+### What to Figure Out
 
-   **Requirements:**
-   - POST to JSONPlaceholder: `https://jsonplaceholder.typicode.com/posts`
-   - Send JSON data: title, body, userId
-   - Receive response with ID
-   - Verify status 201
+-   try/except
+-   `.raise_for_status()`
+-   Catch:
+    -   HTTPError
+    -   ConnectionError
+    -   Timeout
+    -   RequestException
 
-   **What to figure out:**
-   - Make POST requests
-   - Send JSON in body
-   - Set headers
-   - Verify creation
+### Testing
 
-   ---
+-   Invalid URL → connection error\
+-   Missing endpoint → 404\
+-   No internet\
+-   Timeout test
 
-   **Exercise 4: Query Parameters**
+## Exercise 3: POST Request
 
-   **Requirements:**
-   - GET from Exchange Rate API: `https://api.exchangerate-api.com/v4/latest/USD`
-   - Parse exchange rates
-   - Extract EUR, GBP, JPY rates
-   - Calculate $100 in each currency
-   - Format output: "$100 USD = €X EUR"
+### Requirements
 
-   **Extensions:**
-   - Different base currencies
-   - Non-USD conversions
-   - Handle missing currencies
+POST → `https://jsonplaceholder.typicode.com/posts`
 
-   ---
+Send:
 
-   **Exercise 5: Reusable API Function**
+``` json
+{
+  "title": "Learning Python APIs",
+  "body": "Understanding how to make POST requests",
+  "userId": 1
+}
+```
 
-   **Requirements:**
-   - Create function for ANY API
-   - Accept URL as input
-   - Make GET request
-   - Handle all errors
-   - Return parsed JSON or None
-   - Test with 3 different APIs
+Expect: - 201 Created\
+- Extract ID
 
-   **Advanced challenges:**
-   - Support POST requests
-   - Add timeout parameter
-   - Add retry logic (3 attempts)
+## Exercise 4: Query Parameters
+
+GET → `https://api.coinbase.com/v2/exchange-rates?currency=USD`
+
+Goals: - Extract EUR, GBP, JPY - Convert \$100 USD - Format results
+
+## Exercise 5: Reusable API Function
+
+Create: `fetch_api(url, method="GET", timeout=10)`
+
+Must: - Support GET/POST\
+- Handle all errors\
+- Return JSON or None\
+- Never crash
+
+Test with: - CoinGecko\
+- Coinbase\
+- JSONPlaceholder
+
+## Exercise 6: Payment Monitoring (Bonus)
+
+GET:
+`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true`
+
+Extract: - Price\
+- 24h change\
+- Volume
+
+Logic: - If \> ±5% → volatility alert\
+- Add timestamp
+
+## Checklist
+
+-   GET works\
+-   JSON parsed\
+-   Error handling\
+-   POST works\
+-   Query params\
+-   Reusable function\
+-   Clean code
+
+## Verified APIs (Nov 2025)
+
+-   CoinGecko price\
+-   Coinbase rates\
+-   JSONPlaceholder POST\
+-   CoinGecko extended
+
 
    ### Key Concepts to Master
 
@@ -741,6 +771,26 @@ A comprehensive 7-day learning plan covering gradient descent, loss functions, R
    ---
 
    ### HOUR 1: Setup & Basic Routes
+
+   **Cretae directory structure (10 min)**
+
+    week2_fastapi_project/
+    │
+    ├── app/
+    │   ├── __init__.py
+    │   ├── main.py              # FastAPI app (START HERE)
+    │   ├── models.py            # Pydantic models
+    │   ├── database.py          # Database connection (Week 3)
+    │   └── routers/             # Organize endpoints (later)
+    │       ├── __init__.py
+    │       └── transactions.py
+    │
+    ├── tests/
+    │   ├── __init__.py
+    │   └── test_api.py          # API tests
+    │
+    ├── notebooks/               # Optional: for exploration
+    │   └── test_endpoints.ipynb
 
    **Task 1: Installation & Setup (10 min)**
 
