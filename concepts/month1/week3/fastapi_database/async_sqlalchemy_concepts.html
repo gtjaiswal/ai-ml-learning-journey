@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async SQLAlchemy Concepts</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            border-left: 6px solid #3498db;
+            padding-left: 15px;
+            margin-top: 0;
+        }
+        
+        .concept-box {
+            background: #f8f9fa;
+            border: 3px solid #3498db;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .concept-box h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        
+        .diagram {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .layer {
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .layer-app {
+            background: #e3f2fd;
+            border: 3px solid #2196f3;
+        }
+        
+        .layer-sqlalchemy {
+            background: #fff3e0;
+            border: 3px solid #ff9800;
+        }
+        
+        .layer-driver {
+            background: #f3e5f5;
+            border: 3px solid #9c27b0;
+        }
+        
+        .layer-db {
+            background: #e8f5e9;
+            border: 3px solid #4caf50;
+        }
+        
+        .arrow-down {
+            text-align: center;
+            font-size: 2em;
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .comparison-box {
+            border-radius: 10px;
+            padding: 25px;
+            border: 3px solid;
+        }
+        
+        .sync-box {
+            background: #ffebee;
+            border-color: #e57373;
+        }
+        
+        .async-box {
+            background: #e8f5e9;
+            border-color: #81c784;
+        }
+        
+        .flow-diagram {
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .flow-step {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .flow-step h4 {
+            margin: 0 0 10px 0;
+            color: #3498db;
+        }
+        
+        .timeline {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            gap: 10px;
+        }
+        
+        .time-label {
+            width: 80px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        
+        .time-bar {
+            flex: 1;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .time-block {
+            flex: 1;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .block-waiting {
+            background: #3498db;
+            color: white;
+        }
+        
+        .block-working {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .block-blocked {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .block-free {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .architecture {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .arch-column {
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .arch-column h4 {
+            margin: 0 0 15px 0;
+            color: #3498db;
+            text-align: center;
+        }
+        
+        .component {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .component-engine {
+            border-color: #ff9800;
+            background: #fff3e0;
+        }
+        
+        .component-session {
+            border-color: #9c27b0;
+            background: #f3e5f5;
+        }
+        
+        .component-model {
+            border-color: #2196f3;
+            background: #e3f2fd;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .highlight strong {
+            color: #856404;
+            font-size: 1.2em;
+        }
+        
+        .problem-solution {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .problem-box {
+            background: #ffebee;
+            border: 3px solid #e57373;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .problem-box h4 {
+            margin: 0 0 10px 0;
+            color: #c62828;
+        }
+        
+        .solution-box {
+            background: #e8f5e9;
+            border: 3px solid #81c784;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .solution-box h4 {
+            margin: 0 0 10px 0;
+            color: #2e7d32;
+        }
+        
+        .relationship-diagram {
+            background: white;
+            border: 3px solid #3498db;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+        
+        .entity-box {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px;
+            display: inline-block;
+            min-width: 200px;
+        }
+        
+        .entity-box h4 {
+            margin: 0 0 10px 0;
+            color: #1565c0;
+            border-bottom: 2px solid #1565c0;
+            padding-bottom: 8px;
+        }
+        
+        .field {
+            padding: 5px 0;
+            font-size: 0.9em;
+        }
+        
+        .pk {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        
+        .fk {
+            color: #9c27b0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🗄️ Async SQLAlchemy Concepts Explained</h1>
+    
+    <!-- CONCEPT 1: THE BIG PICTURE -->
+    <div class="section">
+        <h2>1️⃣ The Big Picture: What is SQLAlchemy?</h2>
+        
+        <div class="concept-box">
+            <h3>Definition</h3>
+            <p style="font-size: 1.1em;">
+                <strong>SQLAlchemy</strong> is a Python library that sits between your application and your database. 
+                It translates Python code into SQL queries and database results back into Python objects.
+            </p>
+            <p style="font-size: 1.1em; margin-top: 15px;">
+                <strong>Async SQLAlchemy</strong> is the version that doesn't block your application while waiting for database responses.
+            </p>
+        </div>
+        
+        <div class="diagram">
+            <h3 style="text-align: center; margin-top: 0;">The Stack</h3>
+            
+            <div class="layer layer-app">
+                YOUR APPLICATION<br>
+                <small>(FastAPI, Flask, etc.)</small>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="layer layer-sqlalchemy">
+                SQLAlchemy ORM<br>
+                <small>(Translates Python ↔ SQL)</small>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="layer layer-driver">
+                Database Driver<br>
+                <small>(asyncpg, aiosqlite, etc.)</small>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="layer layer-db">
+                DATABASE<br>
+                <small>(PostgreSQL, MySQL, SQLite, etc.)</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 2: SYNC VS ASYNC -->
+    <div class="section">
+        <h2>2️⃣ Sync vs Async: The Fundamental Difference</h2>
+        
+        <div class="comparison">
+            <div class="comparison-box sync-box">
+                <h3 style="color: #c62828;">❌ Synchronous (Blocking)</h3>
+                <div class="timeline" style="flex-direction: column; align-items: stretch;">
+                    <div style="background: #e74c3c; color: white; padding: 20px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Request 1:</strong> Send query to database
+                    </div>
+                    <div style="background: #95a5a6; color: white; padding: 20px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Wait...</strong> Thread is BLOCKED<br>
+                        Cannot do anything else!
+                    </div>
+                    <div style="background: #27ae60; color: white; padding: 20px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Response 1:</strong> Got data, continue
+                    </div>
+                    <div style="background: #e74c3c; color: white; padding: 20px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Request 2:</strong> Can only start NOW
+                    </div>
+                </div>
+                <div class="highlight" style="background: #ffcdd2; border-color: #e57373;">
+                    <strong>Problem:</strong> One request at a time. If database takes 1 second, you can only handle 1 request/second!
+                </div>
+            </div>
+            
+            <div class="comparison-box async-box">
+                <h3 style="color: #2e7d32;">✅ Asynchronous (Non-Blocking)</h3>
+                <div class="timeline" style="flex-direction: column; align-items: stretch;">
+                    <div style="background: #3498db; color: white; padding: 20px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Request 1:</strong> Send query, yield control
+                    </div>
+                    <div style="background: #3498db; color: white; padding: 20px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Request 2:</strong> Send query, yield control
+                    </div>
+                    <div style="background: #3498db; color: white; padding: 20px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Request 3:</strong> Send query, yield control
+                    </div>
+                    <div style="background: #27ae60; color: white; padding: 20px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Responses:</strong> Handle as they arrive
+                    </div>
+                </div>
+                <div class="highlight" style="background: #c8e6c9; border-color: #81c784;">
+                    <strong>Benefit:</strong> Multiple concurrent requests! If database takes 1 second, you can handle thousands of requests during that second!
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-diagram">
+            <h3 style="text-align: center; margin-top: 0;">Timeline Comparison</h3>
+            
+            <h4>Synchronous (Blocking)</h4>
+            <div class="timeline">
+                <div class="time-label">0-1s</div>
+                <div class="time-bar">
+                    <div class="time-block block-waiting">Request 1 Waiting</div>
+                </div>
+            </div>
+            <div class="timeline">
+                <div class="time-label">1-2s</div>
+                <div class="time-bar">
+                    <div class="time-block block-waiting">Request 2 Waiting</div>
+                </div>
+            </div>
+            <div class="timeline">
+                <div class="time-label">2-3s</div>
+                <div class="time-bar">
+                    <div class="time-block block-waiting">Request 3 Waiting</div>
+                </div>
+            </div>
+            <p style="text-align: center; color: #e74c3c; font-weight: bold;">Total: 3 seconds for 3 requests</p>
+            
+            <h4 style="margin-top: 30px;">Asynchronous (Non-Blocking)</h4>
+            <div class="timeline">
+                <div class="time-label">0-1s</div>
+                <div class="time-bar">
+                    <div class="time-block block-waiting" style="flex: 1;">Request 1</div>
+                    <div class="time-block block-waiting" style="flex: 1;">Request 2</div>
+                    <div class="time-block block-waiting" style="flex: 1;">Request 3</div>
+                </div>
+            </div>
+            <p style="text-align: center; color: #27ae60; font-weight: bold;">Total: 1 second for 3 requests (all concurrent!)</p>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: KEY COMPONENTS -->
+    <div class="section">
+        <h2>3️⃣ Key Components of Async SQLAlchemy</h2>
+        
+        <div class="architecture">
+            <div class="arch-column">
+                <h4>🔧 ENGINE</h4>
+                <div class="component component-engine">
+                    <strong>Connection Pool</strong><br>
+                    <small>Manages database connections</small>
+                </div>
+                <p style="font-size: 0.9em; margin-top: 15px;">
+                    <strong>What:</strong> Factory for database connections<br>
+                    <strong>Created:</strong> Once at app startup<br>
+                    <strong>Contains:</strong> Connection string, pool settings
+                </p>
+            </div>
+            
+            <div class="arch-column">
+                <h4>🔄 SESSION</h4>
+                <div class="component component-session">
+                    <strong>Work Unit</strong><br>
+                    <small>Tracks changes, commits transactions</small>
+                </div>
+                <p style="font-size: 0.9em; margin-top: 15px;">
+                    <strong>What:</strong> Your workspace for database operations<br>
+                    <strong>Created:</strong> Per request/operation<br>
+                    <strong>Contains:</strong> Pending changes, identity map
+                </p>
+            </div>
+            
+            <div class="arch-column">
+                <h4>📦 MODELS</h4>
+                <div class="component component-model">
+                    <strong>Python Classes</strong><br>
+                    <small>Represent database tables</small>
+                </div>
+                <p style="font-size: 0.9em; margin-top: 15px;">
+                    <strong>What:</strong> Blueprint of your data<br>
+                    <strong>Contains:</strong> Fields, relationships, constraints<br>
+                    <strong>Maps to:</strong> Database tables
+                </p>
+            </div>
+        </div>
+        
+        <div class="flow-diagram">
+            <h3 style="text-align: center; margin-top: 0;">How They Work Together</h3>
+            
+            <div class="flow-step">
+                <h4>Step 1: Application Startup</h4>
+                <p>Create <strong>Engine</strong> → Configure connection pool → Create <strong>Session Factory</strong></p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step">
+                <h4>Step 2: Handle Request</h4>
+                <p>Request arrives → Get <strong>Session</strong> from factory → Session opens connection from pool</p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step">
+                <h4>Step 3: Database Operations</h4>
+                <p>Use <strong>Models</strong> → Session tracks changes → Build SQL queries</p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step">
+                <h4>Step 4: Commit or Rollback</h4>
+                <p>Success → Commit changes → Close session → Return connection to pool</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 4: THE N+1 PROBLEM -->
+    <div class="section">
+        <h2>4️⃣ The N+1 Query Problem</h2>
+        
+        <div class="concept-box">
+            <h3>What is the N+1 Problem?</h3>
+            <p style="font-size: 1.1em;">
+                A performance killer where you accidentally make <strong>1 + N</strong> database queries instead of just 1 or 2.
+            </p>
+        </div>
+        
+        <div class="problem-solution">
+            <div class="problem-box">
+                <h4>❌ THE PROBLEM</h4>
+                <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <strong>Query 1:</strong> Get all users<br>
+                    <small>(Returns 100 users)</small>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <strong>Query 2:</strong> Get posts for user #1
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <strong>Query 3:</strong> Get posts for user #2
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <strong>Query 4:</strong> Get posts for user #3
+                </div>
+                <div style="text-align: center; margin: 15px 0; color: #c62828; font-weight: bold;">
+                    ... continues for all 100 users ...
+                </div>
+                <div style="background: #ffcdd2; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <strong>Total: 101 queries!</strong><br>
+                    Extremely slow!
+                </div>
+            </div>
+            
+            <div class="solution-box">
+                <h4>✅ THE SOLUTION: Eager Loading</h4>
+                <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <strong>Query 1:</strong> Get all users
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <strong>Query 2:</strong> Get ALL posts for ALL users at once<br>
+                    <small>(Using JOIN or IN clause)</small>
+                </div>
+                <div style="background: #c8e6c9; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <strong>Total: 2 queries!</strong><br>
+                    Fast and efficient!
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <strong>🎯 The Principle:</strong><br>
+            Always load related data <strong>upfront</strong> if you know you'll need it. 
+            Don't wait for lazy loading to trigger individual queries.
+        </div>
+    </div>
+
+    <!-- CONCEPT 5: RELATIONSHIPS -->
+    <div class="section">
+        <h2>5️⃣ Database Relationships</h2>
+        
+        <div class="relationship-diagram">
+            <h3 style="text-align: center; margin-top: 0;">One-to-Many Relationship Example</h3>
+            
+            <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap;">
+                <div class="entity-box">
+                    <h4>👤 User</h4>
+                    <div class="field pk">🔑 id (Primary Key)</div>
+                    <div class="field">username</div>
+                    <div class="field">email</div>
+                    <div class="field">created_at</div>
+                </div>
+                
+                <div style="font-size: 3em; color: #3498db;">
+                    →
+                </div>
+                
+                <div class="entity-box">
+                    <h4>📝 Post</h4>
+                    <div class="field pk">🔑 id (Primary Key)</div>
+                    <div class="field fk">🔗 user_id (Foreign Key)</div>
+                    <div class="field">title</div>
+                    <div class="field">content</div>
+                    <div class="field">created_at</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                <strong>Meaning:</strong> One User can have Many Posts<br>
+                Each Post belongs to exactly One User
+            </div>
+        </div>
+        
+        <div class="concept-box">
+            <h3>Types of Relationships</h3>
+            <table style="width: 100%; margin-top: 15px;">
+                <tr style="background: #3498db; color: white;">
+                    <th style="padding: 12px;">Relationship</th>
+                    <th style="padding: 12px;">Example</th>
+                    <th style="padding: 12px;">How It Works</th>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><strong>One-to-Many</strong></td>
+                    <td style="padding: 12px;">User → Posts</td>
+                    <td style="padding: 12px;">User table, Posts table with user_id</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 12px;"><strong>Many-to-One</strong></td>
+                    <td style="padding: 12px;">Post → User</td>
+                    <td style="padding: 12px;">Same as above, different perspective</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><strong>One-to-One</strong></td>
+                    <td style="padding: 12px;">User → Profile</td>
+                    <td style="padding: 12px;">Profile table with unique user_id</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 12px;"><strong>Many-to-Many</strong></td>
+                    <td style="padding: 12px;">Students ↔ Courses</td>
+                    <td style="padding: 12px;">Three tables: Students, Courses, Enrollment (junction table)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: SESSION LIFECYCLE -->
+    <div class="section">
+        <h2>6️⃣ Session Lifecycle</h2>
+        
+        <div class="flow-diagram">
+            <h3 style="text-align: center; margin-top: 0;">Life of a Database Session</h3>
+            
+            <div class="flow-step" style="background: #e3f2fd;">
+                <h4>1️⃣ CREATION</h4>
+                <p>Session created → Gets connection from pool → Ready to work</p>
+                <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                    <strong>State:</strong> Clean, no changes tracked
+                </p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #fff3e0;">
+                <h4>2️⃣ OPERATIONS</h4>
+                <p>Add objects → Modify objects → Delete objects</p>
+                <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                    <strong>State:</strong> Tracking changes (dirty), not yet in database
+                </p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #f3e5f5;">
+                <h4>3️⃣ COMMIT / ROLLBACK</h4>
+                <p><strong>Success:</strong> Commit → Changes saved to database</p>
+                <p><strong>Error:</strong> Rollback → Changes discarded</p>
+                <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                    <strong>State:</strong> Clean again after commit/rollback
+                </p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #e8f5e9;">
+                <h4>4️⃣ CLOSE</h4>
+                <p>Session closed → Connection returned to pool → Resources released</p>
+                <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                    <strong>State:</strong> Session no longer usable
+                </p>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <strong>⚠️ Important:</strong> Always close sessions! Use context managers (with statement) 
+            to ensure sessions are properly closed even if errors occur.
+        </div>
+    </div>
+
+    <!-- CONCEPT 7: QUERY EXECUTION FLOW -->
+    <div class="section">
+        <h2>7️⃣ Query Execution Flow</h2>
+        
+        <div class="diagram">
+            <h3 style="text-align: center; margin-top: 0;">From Python to Database and Back</h3>
+            
+            <div class="flow-step" style="background: #e3f2fd;">
+                <h4>Step 1: Build Query (Python)</h4>
+                <p>You write: <code>select(User).where(User.age >= 18)</code></p>
+                <p style="color: #666; margin-top: 10px;">This creates a query object, not yet executed</p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #fff3e0;">
+                <h4>Step 2: Compile to SQL</h4>
+                <p>SQLAlchemy translates to: <code>SELECT * FROM users WHERE age >= 18</code></p>
+                <p style="color: #666; margin-top: 10px;">Different SQL for different databases (PostgreSQL, MySQL, etc.)</p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #f3e5f5;">
+                <h4>Step 3: Send to Database (Async!)</h4>
+                <p>Query sent over network → Your app yields control (doesn't wait!)</p>
+                <p style="color: #666; margin-top: 10px;">Event loop can handle other requests while waiting</p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #fff3e0;">
+                <h4>Step 4: Database Processes</h4>
+                <p>Database executes query → Finds matching rows → Prepares results</p>
+                <p style="color: #666; margin-top: 10px;">This happens on the database server</p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #e8f5e9;">
+                <h4>Step 5: Results Return (Async!)</h4>
+                <p>Results come back → Event loop notifies your code → You resume</p>
+                <p style="color: #666; margin-top: 10px;">Results as raw rows</p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #e3f2fd;">
+                <h4>Step 6: Convert to Python Objects</h4>
+                <p>SQLAlchemy converts rows → User objects with attributes</p>
+                <p style="color: #666; margin-top: 10px;">Now you can use: user.name, user.age, etc.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 8: COMMON PATTERNS -->
+    <div class="section">
+        <h2>8️⃣ Common Usage Patterns</h2>
+        
+        <div class="architecture" style="grid-template-columns: 1fr 1fr;">
+            <div class="arch-column">
+                <h4>📖 READING DATA</h4>
+                <div class="component" style="border-color: #2196f3; background: #e3f2fd;">
+                    <strong>Get by ID</strong><br>
+                    <small>Most efficient for primary keys</small>
+                </div>
+                <div class="component" style="border-color: #2196f3; background: #e3f2fd;">
+                    <strong>Filter & Search</strong><br>
+                    <small>Find records matching criteria</small>
+                </div>
+                <div class="component" style="border-color: #2196f3; background: #e3f2fd;">
+                    <strong>Pagination</strong><br>
+                    <small>Load results in chunks</small>
+                </div>
+                <div class="component" style="border-color: #2196f3; background: #e3f2fd;">
+                    <strong>Aggregation</strong><br>
+                    <small>COUNT, SUM, AVG, etc.</small>
+                </div>
+            </div>
+            
+            <div class="arch-column">
+                <h4>✏️ WRITING DATA</h4>
+                <div class="component" style="border-color: #4caf50; background: #e8f5e9;">
+                    <strong>Create</strong><br>
+                    <small>Add new records</small>
+                </div>
+                <div class="component" style="border-color: #4caf50; background: #e8f5e9;">
+                    <strong>Update</strong><br>
+                    <small>Modify existing records</small>
+                </div>
+                <div class="component" style="border-color: #4caf50; background: #e8f5e9;">
+                    <strong>Delete</strong><br>
+                    <small>Remove records</small>
+                </div>
+                <div class="component" style="border-color: #4caf50; background: #e8f5e9;">
+                    <strong>Bulk Operations</strong><br>
+                    <small>Many records at once</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 9: WHY ASYNC MATTERS -->
+    <div class="section">
+        <h2>9️⃣ Why Async SQLAlchemy Matters</h2>
+        
+        <div class="concept-box">
+            <h3>Real-World Impact</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div style="background: #ffcdd2; padding: 20px; border-radius: 8px;">
+                    <h4 style="color: #c62828; margin-top: 0;">❌ Sync SQLAlchemy</h4>
+                    <p><strong>Scenario:</strong> 100 users make requests, each query takes 100ms</p>
+                    <p style="font-size: 1.5em; color: #c62828; margin: 20px 0;">
+                        <strong>Total Time: 10 seconds</strong>
+                    </p>
+                    <p>Users wait sequentially. Last user waits 10 seconds!</p>
+                    <p style="margin-top: 15px;"><strong>Throughput:</strong> 10 requests/second</p>
+                </div>
+                
+                <div style="background: #c8e6c9; padding: 20px; border-radius: 8px;">
+                    <h4 style="color: #2e7d32; margin-top: 0;">✅ Async SQLAlchemy</h4>
+                    <p><strong>Scenario:</strong> Same 100 users, same 100ms queries</p>
+                    <p style="font-size: 1.5em; color: #2e7d32; margin: 20px 0;">
+                        <strong>Total Time: ~100ms</strong>
+                    </p>
+                    <p>All users get responses almost simultaneously!</p>
+                    <p style="margin-top: 15px;"><strong>Throughput:</strong> 1000+ requests/second</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <strong>🚀 The Magic:</strong><br>
+            While waiting for database responses (I/O), async code can handle hundreds or thousands 
+            of other requests. It's like a restaurant where waiters don't stand at tables waiting 
+            for customers to finish eating - they serve many tables at once!
+        </div>
+    </div>
+
+    <!-- CONCEPT 10: POSTGRESQL SPECIFIC -->
+    <div class="section">
+        <h2>🐘 PostgreSQL with Async SQLAlchemy</h2>
+        
+        <div class="concept-box">
+            <h3>Why PostgreSQL?</h3>
+            <p style="font-size: 1.1em;">
+                PostgreSQL is the <strong>production standard</strong> for serious applications. It's what you'll use 
+                in real ML/AI projects, not SQLite (which is for development/testing only).
+            </p>
+        </div>
+        
+        <div class="diagram">
+            <h3 style="text-align: center; margin-top: 0;">PostgreSQL Stack with asyncpg</h3>
+            
+            <div class="layer layer-app">
+                YOUR FASTAPI APPLICATION<br>
+                <small>(Handling thousands of requests)</small>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="layer layer-sqlalchemy">
+                SQLALCHEMY ORM<br>
+                <small>(Python objects ↔ SQL translation)</small>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="layer layer-driver">
+                ASYNCPG DRIVER<br>
+                <small>(Pure async, fastest Python PostgreSQL driver)</small>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="layer layer-db">
+                POSTGRESQL DATABASE<br>
+                <small>(Your production database server)</small>
+            </div>
+        </div>
+        
+        <div class="flow-diagram">
+            <h3 style="text-align: center; margin-top: 0;">Connection String Anatomy</h3>
+            
+            <div style="background: #282c34; color: #61afef; padding: 25px; border-radius: 8px; font-family: monospace; font-size: 1.2em; text-align: center; margin: 20px 0;">
+                postgresql+asyncpg://username:password@hostname:port/database_name
+            </div>
+            
+            <div class="architecture" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="component" style="background: #e3f2fd; border-color: #2196f3;">
+                    <strong>postgresql</strong><br>
+                    <small>Database type</small>
+                </div>
+                <div class="component" style="background: #f3e5f5; border-color: #9c27b0;">
+                    <strong>asyncpg</strong><br>
+                    <small>Async driver</small>
+                </div>
+                <div class="component" style="background: #fff3e0; border-color: #ff9800;">
+                    <strong>credentials</strong><br>
+                    <small>username:password</small>
+                </div>
+                <div class="component" style="background: #e8f5e9; border-color: #4caf50;">
+                    <strong>location</strong><br>
+                    <small>hostname:port</small>
+                </div>
+                <div class="component" style="background: #fce4ec; border-color: #e91e63;">
+                    <strong>database</strong><br>
+                    <small>specific DB</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 11: CONNECTION POOLING -->
+    <div class="section">
+        <h2>🏊 Connection Pool: The Secret Sauce</h2>
+        
+        <div class="concept-box">
+            <h3>What is a Connection Pool?</h3>
+            <p style="font-size: 1.1em;">
+                Creating new database connections is <strong>expensive</strong> (takes time, resources). 
+                A connection pool maintains ready-to-use connections so you can reuse them.
+            </p>
+        </div>
+        
+        <div class="comparison">
+            <div class="comparison-box sync-box">
+                <h3 style="color: #c62828;">❌ Without Connection Pool</h3>
+                <div class="timeline" style="flex-direction: column; align-items: stretch;">
+                    <div style="background: #e74c3c; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Request 1: Create new connection (200ms)
+                    </div>
+                    <div style="background: #3498db; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Query executes (50ms)
+                    </div>
+                    <div style="background: #95a5a6; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Close connection
+                    </div>
+                    <div style="background: #e74c3c; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Request 2: Create new connection (200ms)
+                    </div>
+                    <div style="background: #3498db; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Query executes (50ms)
+                    </div>
+                </div>
+                <p style="text-align: center; color: #c62828; font-weight: bold; margin-top: 15px;">
+                    Total: 500ms (most time wasted on connections!)
+                </p>
+            </div>
+            
+            <div class="comparison-box async-box">
+                <h3 style="color: #2e7d32;">✅ With Connection Pool</h3>
+                <div class="timeline" style="flex-direction: column; align-items: stretch;">
+                    <div style="background: #27ae60; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Startup: Create pool of 20 connections (once)
+                    </div>
+                    <div style="background: #3498db; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Request 1: Grab connection, query (50ms), return
+                    </div>
+                    <div style="background: #3498db; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Request 2: Grab connection, query (50ms), return
+                    </div>
+                    <div style="background: #3498db; color: white; padding: 15px; border-radius: 5px; margin: 8px 0;">
+                        Request 3-20: All use existing connections
+                    </div>
+                </div>
+                <p style="text-align: center; color: #2e7d32; font-weight: bold; margin-top: 15px;">
+                    Total: 100ms (4x faster, can handle 20 concurrent!)
+                </p>
+            </div>
+        </div>
+        
+        <div class="flow-diagram">
+            <h3 style="text-align: center; margin-top: 0;">Connection Pool Visualization</h3>
+            
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0;">
+                <div style="text-align: center; font-size: 1.3em; margin-bottom: 20px; color: #3498db;">
+                    <strong>🏊 Connection Pool (Size: 20, Max Overflow: 5)</strong>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0;">
+                    <div style="background: #27ae60; color: white; padding: 15px; border-radius: 5px; text-align: center;">
+                        Conn 1<br>✅ Active
+                    </div>
+                    <div style="background: #27ae60; color: white; padding: 15px; border-radius: 5px; text-align: center;">
+                        Conn 2<br>✅ Active
+                    </div>
+                    <div style="background: #ecf0f1; color: #666; padding: 15px; border-radius: 5px; text-align: center;">
+                        Conn 3<br>💤 Idle
+                    </div>
+                    <div style="background: #ecf0f1; color: #666; padding: 15px; border-radius: 5px; text-align: center;">
+                        Conn 4<br>💤 Idle
+                    </div>
+                    <div style="background: #ecf0f1; color: #666; padding: 15px; border-radius: 5px; text-align: center;">
+                        Conn 5<br>💤 Idle
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <div style="background: #3498db; color: white; padding: 15px; border-radius: 8px; display: inline-block;">
+                        ... 15 more idle connections ...
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                    <p style="margin: 0;"><strong>How it works:</strong></p>
+                    <ul style="margin: 10px 0;">
+                        <li>Request comes in → Grab idle connection → Execute query → Return to pool</li>
+                        <li>If all 20 busy → Create temporary overflow connection (up to 5 extra)</li>
+                        <li>Overflow connections close after use (don't stay in pool)</li>
+                        <li>If all 25 busy → New requests wait in queue</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="concept-box">
+            <h3>Pool Configuration Strategy</h3>
+            <table style="width: 100%; margin-top: 15px;">
+                <tr style="background: #3498db; color: white;">
+                    <th style="padding: 12px;">Scenario</th>
+                    <th style="padding: 12px;">Pool Size</th>
+                    <th style="padding: 12px;">Max Overflow</th>
+                    <th style="padding: 12px;">Reasoning</th>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><strong>Development/Testing</strong></td>
+                    <td style="padding: 12px;">5</td>
+                    <td style="padding: 12px;">0</td>
+                    <td style="padding: 12px;">Low traffic, simple debugging</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 12px;"><strong>Small Production App</strong></td>
+                    <td style="padding: 12px;">10-20</td>
+                    <td style="padding: 12px;">5-10</td>
+                    <td style="padding: 12px;">Handle moderate spikes</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><strong>Large Production App</strong></td>
+                    <td style="padding: 12px;">50-100</td>
+                    <td style="padding: 12px;">20-30</td>
+                    <td style="padding: 12px;">High concurrent requests</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 12px;"><strong>ML Inference Service</strong></td>
+                    <td style="padding: 12px;">20-30</td>
+                    <td style="padding: 12px;">10</td>
+                    <td style="padding: 12px;">Frequent reads, moderate writes</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONCEPT 12: PRODUCTION WORKFLOW -->
+    <div class="section">
+        <h2>🏭 Production Workflow with PostgreSQL</h2>
+        
+        <div class="flow-diagram">
+            <h3 style="text-align: center; margin-top: 0;">Complete Application Lifecycle</h3>
+            
+            <div class="flow-step" style="background: #e3f2fd;">
+                <h4>Phase 1: Application Startup</h4>
+                <p><strong>Step 1:</strong> Application starts</p>
+                <p><strong>Step 2:</strong> Create async engine with PostgreSQL connection string</p>
+                <p><strong>Step 3:</strong> Engine creates connection pool (e.g., 20 connections to PostgreSQL)</p>
+                <p><strong>Step 4:</strong> Create session factory from engine</p>
+                <p><strong>Step 5:</strong> Optionally create/verify database tables exist</p>
+                <p style="color: #666; margin-top: 10px;"><em>This happens ONCE when your app starts</em></p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #fff3e0;">
+                <h4>Phase 2: Handle Request (Per User Request)</h4>
+                <p><strong>Step 1:</strong> HTTP request arrives at FastAPI endpoint</p>
+                <p><strong>Step 2:</strong> Dependency injection creates new session from factory</p>
+                <p><strong>Step 3:</strong> Session grabs connection from pool (non-blocking!)</p>
+                <p><strong>Step 4:</strong> Execute database operations (create/read/update/delete)</p>
+                <p><strong>Step 5:</strong> Commit changes or rollback on error</p>
+                <p><strong>Step 6:</strong> Session closes, connection returns to pool</p>
+                <p style="color: #666; margin-top: 10px;"><em>This happens for EVERY request</em></p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #f3e5f5;">
+                <h4>Phase 3: Database Operation Flow</h4>
+                <p><strong>Step 1:</strong> Build query using SQLAlchemy (Python objects)</p>
+                <p><strong>Step 2:</strong> SQLAlchemy compiles to PostgreSQL-specific SQL</p>
+                <p><strong>Step 3:</strong> asyncpg sends query over network (async, non-blocking)</p>
+                <p><strong>Step 4:</strong> Your app's event loop handles other requests while waiting</p>
+                <p><strong>Step 5:</strong> PostgreSQL processes query and returns results</p>
+                <p><strong>Step 6:</strong> asyncpg receives results, notifies event loop</p>
+                <p><strong>Step 7:</strong> SQLAlchemy converts raw rows to Python objects</p>
+                <p style="color: #666; margin-top: 10px;"><em>Steps 3-6 are async - app never blocks!</em></p>
+            </div>
+            
+            <div class="arrow-down">⬇️</div>
+            
+            <div class="flow-step" style="background: #e8f5e9;">
+                <h4>Phase 4: Application Shutdown</h4>
+                <p><strong>Step 1:</strong> Application receives shutdown signal</p>
+                <p><strong>Step 2:</strong> Finish processing active requests</p>
+                <p><strong>Step 3:</strong> Close all sessions gracefully</p>
+                <p><strong>Step 4:</strong> Engine disposes connection pool</p>
+                <p><strong>Step 5:</strong> All PostgreSQL connections closed</p>
+                <p style="color: #666; margin-top: 10px;"><em>Clean shutdown prevents connection leaks</em></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 13: FASTAPI INTEGRATION -->
+    <div class="section">
+        <h2>🚀 FastAPI + Async SQLAlchemy + PostgreSQL Pattern</h2>
+        
+        <div class="diagram">
+            <h3 style="text-align: center; margin-top: 0;">Request Handling Architecture</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin: 30px 0;">
+                <div>
+                    <div class="layer layer-app" style="margin: 10px 0;">
+                        <strong>1. FastAPI Endpoint</strong><br>
+                        <small>Receives HTTP request</small>
+                    </div>
+                    <div class="arrow-down">⬇️</div>
+                    <div class="layer layer-sqlalchemy" style="margin: 10px 0;">
+                        <strong>2. Dependency Injection</strong><br>
+                        <small>Creates database session</small>
+                    </div>
+                    <div class="arrow-down">⬇️</div>
+                    <div class="layer layer-driver" style="margin: 10px 0;">
+                        <strong>3. Service Layer</strong><br>
+                        <small>Business logic + queries</small>
+                    </div>
+                    <div class="arrow-down">⬇️</div>
+                    <div class="layer layer-db" style="margin: 10px 0;">
+                        <strong>4. SQLAlchemy + asyncpg</strong><br>
+                        <small>Execute async queries</small>
+                    </div>
+                    <div class="arrow-down">⬇️</div>
+                    <div class="layer layer-app" style="margin: 10px 0;">
+                        <strong>5. Return Response</strong><br>
+                        <small>JSON to client</small>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <h4 style="margin-top: 0;">Pseudo Flow for "Create User" Endpoint</h4>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #3498db;">
+                        <strong>Incoming:</strong> POST /users/ with JSON data
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #ff9800;">
+                        <strong>FastAPI:</strong> Validates JSON against Pydantic schema<br>
+                        <small>If invalid → Return 422 error immediately</small>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #9c27b0;">
+                        <strong>Dependency:</strong> Create session from pool<br>
+                        <small>Inject into endpoint function</small>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4caf50;">
+                        <strong>Service Layer:</strong><br>
+                        • Check if username exists (async query to PostgreSQL)<br>
+                        • Check if email exists (async query to PostgreSQL)<br>
+                        • Create new User object<br>
+                        • Add to session<br>
+                        • Commit transaction (async write to PostgreSQL)<br>
+                        • Refresh object to get generated ID
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #2196f3;">
+                        <strong>Response:</strong> Convert User object to Pydantic schema<br>
+                        <small>Return JSON with 201 Created status</small>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #95a5a6;">
+                        <strong>Cleanup:</strong> Session closes automatically<br>
+                        <small>Connection returned to pool</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <strong>🎯 Key Insight:</strong><br>
+            The entire flow is non-blocking! While waiting for PostgreSQL to check if username exists, 
+            the event loop can process 100 other requests. That's why async SQLAlchemy + FastAPI can 
+            handle thousands of concurrent users with minimal resources.
+        </div>
+    </div>
+
+    <!-- CONCEPT 14: POSTGRESQL SPECIFIC FEATURES -->
+    <div class="section">
+        <h2>🎁 PostgreSQL-Specific Features in SQLAlchemy</h2>
+        
+        <div class="architecture" style="grid-template-columns: repeat(2, 1fr);">
+            <div class="arch-column">
+                <h4>🚀 Performance Features</h4>
+                <div class="component" style="border-color: #4caf50; background: #e8f5e9;">
+                    <strong>JSONB Type</strong><br>
+                    <small>Store and query JSON efficiently</small>
+                </div>
+                <div class="component" style="border-color: #4caf50; background: #e8f5e9;">
+                    <strong>Array Types</strong><br>
+                    <small>Native array columns</small>
+                </div>
+                <div class="component" style="border-color: #4caf50; background: #e8f5e9;">
+                    <strong>Full-Text Search</strong><br>
+                    <small>Built-in search capabilities</small>
+                </div>
+                <div class="component" style="border-color: #4caf50; background: #e8f5e9;">
+                    <strong>Materialized Views</strong><br>
+                    <small>Cached complex queries</small>
+                </div>
+            </div>
+            
+            <div class="arch-column">
+                <h4>🛡️ Data Integrity</h4>
+                <div class="component" style="border-color: #2196f3; background: #e3f2fd;">
+                    <strong>ACID Compliance</strong><br>
+                    <small>Guaranteed data consistency</small>
+                </div>
+                <div class="component" style="border-color: #2196f3; background: #e3f2fd;">
+                    <strong>Foreign Key Constraints</strong><br>
+                    <small>Enforced relationships</small>
+                </div>
+                <div class="component" style="border-color: #2196f3; background: #e3f2fd;">
+                    <strong>Check Constraints</strong><br>
+                    <small>Custom validation rules</small>
+                </div>
+                <div class="component" style="border-color: #2196f3; background: #e3f2fd;">
+                    <strong>Triggers</strong><br>
+                    <small>Automated actions on changes</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="concept-box">
+            <h3>Example: JSONB for ML Model Metadata</h3>
+            <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                <p><strong>Scenario:</strong> Storing ML model training metadata</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div>
+                        <h4 style="color: #e74c3c;">❌ Without JSONB (Multiple Tables)</h4>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 5px 0;">
+                            <strong>model</strong> table<br>
+                            <small>id, name, version, created_at</small>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 5px 0;">
+                            <strong>hyperparameters</strong> table<br>
+                            <small>model_id, key, value</small>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 5px 0;">
+                            <strong>metrics</strong> table<br>
+                            <small>model_id, key, value</small>
+                        </div>
+                        <p style="color: #c62828; margin-top: 10px;"><strong>Problem:</strong> Complex queries, rigid schema</p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #27ae60;">✅ With JSONB (Single Table)</h4>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 5px 0;">
+                            <strong>model</strong> table<br>
+                            <small>id, name, version, created_at,<br>
+                            <strong>hyperparameters (JSONB)</strong>,<br>
+                            <strong>metrics (JSONB)</strong></small>
+                        </div>
+                        <div style="background: #c8e6c9; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>JSONB contains:</strong><br>
+                            {<br>
+                            &nbsp;&nbsp;"learning_rate": 0.001,<br>
+                            &nbsp;&nbsp;"batch_size": 32,<br>
+                            &nbsp;&nbsp;"epochs": 100,<br>
+                            &nbsp;&nbsp;"optimizer": "adam"<br>
+                            }
+                        </div>
+                        <p style="color: #2e7d32; margin-top: 10px;"><strong>Benefit:</strong> Flexible schema, fast queries</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 15: COMMON PITFALLS -->
+    <div class="section">
+        <h2>⚠️ Common Pitfalls with PostgreSQL + Async SQLAlchemy</h2>
+        
+        <div class="problem-solution">
+            <div class="problem-box">
+                <h4>❌ Pitfall 1: Connection Pool Exhaustion</h4>
+                <p><strong>What happens:</strong> All connections busy, new requests hang forever</p>
+                <p style="margin-top: 10px;"><strong>Cause:</strong> Sessions not properly closed, or pool too small for load</p>
+                <p style="margin-top: 10px;"><strong>Symptom:</strong> App freezes under load, timeout errors</p>
+            </div>
+            
+            <div class="solution-box">
+                <h4>✅ Solution</h4>
+                <p><strong>Always use context managers:</strong> Ensures sessions close automatically</p>
+                <p style="margin-top: 10px;"><strong>Monitor pool usage:</strong> Add logging to track active connections</p>
+                <p style="margin-top: 10px;"><strong>Size pool correctly:</strong> Start with 20, increase if seeing waits</p>
+            </div>
+        </div>
+        
+        <div class="problem-solution">
+            <div class="problem-box">
+                <h4>❌ Pitfall 2: Lazy Loading in Async</h4>
+                <p><strong>What happens:</strong> Access relationship attribute, get error or hang</p>
+                <p style="margin-top: 10px;"><strong>Cause:</strong> Trying to lazy load after session closed or in async context</p>
+                <p style="margin-top: 10px;"><strong>Symptom:</strong> DetachedInstanceError or mysterious hangs</p>
+            </div>
+            
+            <div class="solution-box">
+                <h4>✅ Solution</h4>
+                <p><strong>Always eager load:</strong> Use selectinload for relationships you need</p>
+                <p style="margin-top: 10px;"><strong>Load everything upfront:</strong> While session is still active</p>
+                <p style="margin-top: 10px;"><strong>Use expire_on_commit=False:</strong> Keeps objects usable after commit</p>
+            </div>
+        </div>
+        
+        <div class="problem-solution">
+            <div class="problem-box">
+                <h4>❌ Pitfall 3: Long-Running Transactions</h4>
+                <p><strong>What happens:</strong> Transaction holds locks, blocks other queries</p>
+                <p style="margin-top: 10px;"><strong>Cause:</strong> Session stays open too long (network call, file I/O inside transaction)</p>
+                <p style="margin-top: 10px;"><strong>Symptom:</strong> Slow queries, database locks, timeouts</p>
+            </div>
+            
+            <div class="solution-box">
+                <h4>✅ Solution</h4>
+                <p><strong>Keep transactions short:</strong> Only database operations inside transaction</p>
+                <p style="margin-top: 10px;"><strong>External calls outside:</strong> API calls, file writes AFTER commit</p>
+                <p style="margin-top: 10px;"><strong>Pattern:</strong> Fetch data → Close session → Do external work → New session if needed</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 16: PRODUCTION CHECKLIST -->
+    <div class="section">
+        <h2>✅ Production Deployment Checklist</h2>
+        
+        <div class="concept-box">
+            <h3>Before Going Live with PostgreSQL + Async SQLAlchemy</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div>
+                    <h4 style="color: #2196f3;">🔧 Configuration</h4>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #2196f3;">
+                        ✓ Connection string from environment variables (not hardcoded)
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #2196f3;">
+                        ✓ Connection pool sized for expected load
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #2196f3;">
+                        ✓ Connection timeout configured
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #2196f3;">
+                        ✓ SSL enabled for database connection
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="color: #4caf50;">🛡️ Reliability</h4>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #4caf50;">
+                        ✓ All sessions use context managers
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #4caf50;">
+                        ✓ Error handling with rollback
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #4caf50;">
+                        ✓ Database migrations managed (Alembic)
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #4caf50;">
+                        ✓ Health check endpoint tests database
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="color: #ff9800;">📊 Performance</h4>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #ff9800;">
+                        ✓ All relationships use eager loading
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #ff9800;">
+                        ✓ Indexes on frequently queried columns
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #ff9800;">
+                        ✓ Pagination for large result sets
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #ff9800;">
+                        ✓ Query logging disabled (or minimal)
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="color: #9c27b0;">🔍 Monitoring</h4>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #9c27b0;">
+                        ✓ Connection pool metrics logged
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #9c27b0;">
+                        ✓ Slow query logging enabled
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #9c27b0;">
+                        ✓ Database connection errors tracked
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 5px; margin: 8px 0; border-left: 4px solid #9c27b0;">
+                        ✓ Alert on connection pool exhaustion
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+services:
+  book_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/ai-ml-learning
+    ports:
+      - "8000:8000"
+    networks:
+      - al_ml_learning_network
+
+  postgres:
+      image: postgres:16-alpine
+      container_name: al_ml_learning_postgres
+      environment:
+        - POSTGRES_DB=al_ml_learning_db
+        - POSTGRES_USER=al_ml_learning_user
+        - POSTGRES_PASSWORD=al_ml_learning_password
+        - POSTGRES_HOST_AUTH_METHOD="password"
+        - PGDATA=/var/lib/postgresql/data/pgdata
+      ports:
+        - "5433:5432"
+        # HOST_PORT:CONTAINER_PORT - Local Mac connects to 5433 (avoids conflict with other DB) : PostgreSQL listens on 5432 inside container (default)
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+        - ./init-scripts:/docker-entrypoint-initdb.d
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U al_ml_learning_user -d al_ml_learning_db"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+      networks:
+        - al_ml_learning_network
+
+volumes:
+  postgres_data:
+
+networks:
+  al_ml_learning_network:
+    driver: bridge

@@ -1121,7 +1121,7 @@ networks:
 
 **Environment Variables:**
 ```yaml
-# In docker-compose.yml
+# In compose.yml
 environment:
   DATABASE_URL: ${DATABASE_URL}
 
