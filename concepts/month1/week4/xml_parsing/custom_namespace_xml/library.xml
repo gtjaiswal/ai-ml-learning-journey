@@ -1,0 +1,14 @@
+<library>
+    <book id="101">
+        <title>Python Basics</title>
+        <author>John Doe</author>
+    </book>
+    <book id="102">
+        <title>Data Science 101</title>
+        <author>Jane Smith</author>
+    </book>
+    <book id="103">
+        <title>Machine Learning</title>
+        <author>Emily Davis</author>
+    </book>
+</library>

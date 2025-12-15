@@ -1,0 +1,14 @@
+<library>
+    <book id="301" published="2019">
+        <title>Intro to AI</title>
+        <publisher>Springer</publisher>
+    </book>
+    <book id="302" published="2021">
+        <title>Advanced AI</title>
+        <publisher>O'Reilly</publisher>
+    </book>
+    <book id="303" published="2022">
+        <title>AI in Practice</title>
+        <publisher>MIT Press</publisher>
+    </book>
+</library>

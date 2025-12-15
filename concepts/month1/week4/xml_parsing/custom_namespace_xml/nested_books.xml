@@ -1,0 +1,16 @@
+<library>
+    <book id="201">
+        <title>Deep Learning</title>
+        <details>
+            <publisher>O'Reilly</publisher>
+            <year>2021</year>
+        </details>
+    </book>
+    <book id="202">
+        <title>AI for Everyone</title>
+        <details>
+            <publisher>MIT Press</publisher>
+            <year>2019</year>
+        </details>
+    </book>
+</library>

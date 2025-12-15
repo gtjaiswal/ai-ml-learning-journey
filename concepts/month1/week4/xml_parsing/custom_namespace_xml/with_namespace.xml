@@ -1,0 +1,10 @@
+<catalog xmlns:bk="http://example.com/books">
+    <bk:book id="401">
+        <bk:title>AI Fundamentals</bk:title>
+        <bk:author>Jane Doe</bk:author>
+    </bk:book>
+    <bk:book id="402">
+        <bk:title>Machine Learning Basics</bk:title>
+        <bk:author>John Smith</bk:author>
+    </bk:book>
+</catalog>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Daily News Feed</title>
+    <link>https://example.com</link>
+    <description>Simple daily updates</description>
+
+    <item>
+      <title>City Park Renovation Completed</title>
+      <link>https://example.com/news1</link>
+      <pubDate>Mon, 01 Dec 2025 10:00:00 GMT</pubDate>
+      <description>The city park renovation was finished ahead of schedule.</description>
+    </item>
+
+    <item>
+      <title>New Library Opens Downtown</title>
+      <link>https://example.com/news2</link>
+      <pubDate>Tue, 02 Dec 2025 14:30:00 GMT</pubDate>
+      <description>A modern library with digital labs opened today.</description>
+    </item>
+
+    <item>
+      <title>Local Sports Team Wins Finals</title>
+      <link>https://example.com/news3</link>
+      <pubDate>Wed, 03 Dec 2025 18:45:00 GMT</pubDate>
+      <description>The city’s basketball team won the national finals.</description>
+    </item>
+  </channel>
+</rss>

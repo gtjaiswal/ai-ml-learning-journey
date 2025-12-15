@@ -24,7 +24,6 @@ services:
         # HOST_PORT:CONTAINER_PORT - Local Mac connects to 5433 (avoids conflict with other DB) : PostgreSQL listens on 5432 inside container (default)
       volumes:
         - postgres_data:/var/lib/postgresql/data
-        - ./init-scripts:/docker-entrypoint-initdb.d
       healthcheck:
         test: ["CMD-SHELL", "pg_isready -U al_ml_learning_user -d al_ml_learning_db"]
         interval: 10s
@@ -32,6 +31,73 @@ services:
         retries: 5
       networks:
         - al_ml_learning_network
+
+  airflow-init:
+    image: apache/airflow:2.7.3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql://al_ml_learning_user:al_ml_learning_password@postgres/al_ml_learning_db
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      _AIRFLOW_DB_MIGRATE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: admin
+      _AIRFLOW_WWW_USER_PASSWORD: admin
+    command: version
+    networks:
+      - al_ml_learning_network
+    restart: on-failure
+
+  airflow-webserver:
+      image: apache/airflow:2.7.3
+      depends_on:
+        postgres:
+          condition: service_healthy
+        airflow-init:
+          condition: service_completed_successfully
+      environment:
+        AIRFLOW__CORE__EXECUTOR: LocalExecutor
+        AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql://al_ml_learning_user:al_ml_learning_password@postgres/al_ml_learning_db
+        AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      volumes:
+        - ./concepts/month1/week4/learn_airflow/dags:/opt/airflow/dags
+        - ./concepts/month1/week4/learn_airflow/logs:/opt/airflow/logs
+        - ./concepts/month1/week4/learn_airflow/plugins:/opt/airflow/plugins
+        - ./concepts/month1/week4/learn_airflow/data:/opt/airflow/data
+      ports:
+        - "8080:8080"
+      command: webserver
+      networks:
+        - al_ml_learning_network
+      restart: always
+      healthcheck:
+        test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+
+  airflow-scheduler:
+      image: apache/airflow:2.7.3
+      depends_on:
+        postgres:
+          condition: service_healthy
+        airflow-init:
+          condition: service_completed_successfully
+      environment:
+        AIRFLOW__CORE__EXECUTOR: LocalExecutor
+        AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql://al_ml_learning_user:al_ml_learning_password@postgres/al_ml_learning_db
+        AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      volumes:
+        - ./concepts/month1/week4/learn_airflow/dags:/opt/airflow/dags
+        - ./concepts/month1/week4/learn_airflow/logs:/opt/airflow/logs
+        - ./concepts/month1/week4/learn_airflow/plugins:/opt/airflow/plugins
+        - ./concepts/month1/week4/learn_airflow/data:/opt/airflow/data
+      command: scheduler
+      networks:
+        - al_ml_learning_network
+      restart: always
 
 volumes:
   postgres_data:
