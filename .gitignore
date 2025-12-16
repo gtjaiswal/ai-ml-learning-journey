@@ -22,3 +22,10 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+#logs
+*logs/
+
+# Ignore egg-info directories created by setuptools
+*egg-info/
+.eggs/
