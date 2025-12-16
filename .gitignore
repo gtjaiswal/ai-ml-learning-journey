@@ -27,5 +27,8 @@ __pycache__/
 *logs/
 
 # Ignore egg-info directories created by setuptools
-*egg-info/
+ai_ml_learning_journey.egg-info/
 .eggs/
+
+# pdfs
+*.pdf
