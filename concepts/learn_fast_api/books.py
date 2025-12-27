@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from concepts.month1.week2.src.fast_api.routers import books_params, books_post_put_delete
+from concepts.learn_fast_api.routers import books_params
+from concepts.learn_fast_api.routers import books_post_put_delete
 
 books_app = FastAPI()
 

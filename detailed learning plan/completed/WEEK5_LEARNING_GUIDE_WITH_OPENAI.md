@@ -8,152 +8,200 @@
 **Deliverable:** Payment transaction Q&A chatbot using OpenAI API with fintech-optimized prompts
 
 **Current Progress:** Week 4 completed (arXiv pipeline operational)
-**Starting Date:** December 15, 2025 (Sunday)
+**Starting Date:** December 16, 2025 (Tuesday)
 
 ---
 
-## DAY 1 (Sunday Dec 15): LLM Fundamentals & Architecture - 90 minutes
+## DAY 1 (Tuesday Dec 16): LLM Fundamentals & Architecture - 90 minutes  ✅
 
-### Primary Video Resources
+### Primary Video Resources  ✅
 
-**"Intro to Large Language Models" by Andrej Karpathy**
-- Link: https://www.youtube.com/watch?v=zjkBMFhNj_g
+**"Intro to Large Language Models" by Andrej Karpathy** 
+- Link: https://www.youtube.com/watch?v=zjkBMFhNj_g  ✅
 - Duration: 1:00:00
 - Watch: Full video (essential foundation)
 - What you'll learn: How LLMs work, capabilities, limitations, GPT architecture
 
-**"GPT in 100 Seconds" by Fireship**
-- Link: https://www.youtube.com/watch?v=PaCmpygFfXo
-- Duration: 2:30
-- Quick high-level overview before deep dive
+**Introduction to Large Language Models** by Google Cloud Tech  
+- Link: https://www.youtube.com/watch?v=zizonToFXDs    ✅
+- Duration: 15:46  
+- What LLMs are, next-token prediction, and how parameters capture knowledge  
+
+**AI ML Training versus Inference** by New Machina  
+- Link: https://www.youtube.com/watch?v=lsPucobtdDk   ✅
+- Duration: 09:20  
+- Clear distinction between training (learning) and inference (usage) phases
+
+**What is the LLM's Context Window ?** by New Machina  
+- https://www.youtube.com/watch?v=y5wBbDSe0cM  ✅
+
+**What are Transformers (Machine Learning Model)?**
+- Link: https://www.youtube.com/watch?v=ZXiruGOCn9s  ✅
+- Link: https://www.youtube.com/watch?v=SZorAJ4I-sA   ✅ + https://www.daleonai.com/transformers-explained
+- Learn more about Transformers → http://ibm.biz/ML-Transformers
+
+**Transformer Neural Networks (ChatGPT’s Foundation)** by StatQuest with Josh Starmer  
+- Link: https://www.youtube.com/watch?v=zxQyTK8quyY  🟡 
+- Duration: 36:15  
+- Tokenization, embeddings, positional encoding, self-attention, encoder/decoder, and parallelization
+
+**Attention in Transformers, Step-by-Step** by 3Blue1Brown  
+- Link: https://www.youtube.com/watch?v=lsPucobtdDk    ✅
+- Duration: 26:10  
+- Intuitive visual explanation of self-attention and contextual word representations  
+
+**Self-Attention Explained Visually (Transformer Intuition)**  
+- Link: https://www.youtube.com/watch?v=PSs6nxngL6k  
+- Duration: ~15:00  
+- Conceptual and visual intuition behind attention and transformer scalability
 
 **"The Illustrated GPT-2" (Visual Walkthrough)**
-- Link: https://jalammar.github.io/illustrated-gpt2/
+- Link: https://www.youtube.com/watch?v=-QH8fRhqFHM&list=PLTx9yCaDlo1UlgZiSgEjq86Zvbo2yC87d&index=2  ✅
+- Link https://www.youtube.com/watch?v=uSinkCeUg9U  ✅
+- https://jalammar.github.io/illustrated-gpt2/
 - Duration: 30 min read
 - Visual step-by-step transformer architecture explanation
 
-### Reading Materials
+**Links for the "Data Privacy in LLMs" subtopic**
+- Additional Resources for Day 1: Data Privacy & Security
+    **"LLM or Large Liability Model? The risks of ChatGPT in Finance"**
+        - https://www.globalrelay.com/resources/thought-leadership/large-language-model-or-large-liability-model-what-are-the-risks-of-chatgpt-in-financial-services/
+        - Why relevant: This article specifically discusses why financial institutions like Bank of America and Goldman Sachs have restricted ChatGPT, citing risks of bias, hallucination, and data leakage.
+    **"Data Privacy and Security Challenges in Using LLMs for Business"**
+        - https://medium.com/@gurpreets_87390/data-privacy-and-security-challenges-in-using-llms-for-business-4a2945009847
+        - Why relevant: It breaks down key risks such as "Data Leakage Through Prompts," "Retention of Input Data," and "Prompt Injection Attacks," which are critical for understanding why banks are cautious.
+    **"Managing Privacy Risks in Large Language Models" - Securiti.ai Whitepaper**
+        - https://securiti.ai/whitepapers/llm-privacy-risks/
+        - Why relevant: Offers a more technical deep dive into privacy risks like sensitive data memorization and regulatory compliance (GDPR, etc.).
+    **"The companies now banning their workers from using ChatGPT"**
+        - https://www.semafor.com/article/05/19/2023/chatgpt-companies-banning-workers
+        - Why relevant: Provides a list of major companies (including banks) that have banned or restricted ChatGPT and the specific reasons given (confidential data leaks, compliance).
+    **Data Privacy for LLMs**
+        - https://youtu.be/XmgXbqT7610
+        - Why relevant: Visual explanation of how data privacy issues arise in LLM architectures and techniques like opaque prompts to mitigate them.
+
+### Reading Materials  ✅
 
 **"How GPT Models Work" by OpenAI**
-- Link: https://platform.openai.com/docs/guides/text-generation
+- Link: https://platform.openai.com/docs/guides/text-generation  ✅
 - Duration: 15 min read
 - Official explanation of text generation
 
-**"Attention Is All You Need" (Original Transformer Paper)**
+**"Attention Is All You Need" (Original Transformer Paper)** 🟡 
 - Link: https://arxiv.org/abs/1706.03762
 - Duration: Read abstract and introduction only (10 min)
 - Historical context and innovation
 
-**"Understanding Large Language Models" by Anthropic**
+**"Understanding Large Language Models" by Anthropic** 🟡 
 - Link: https://www.anthropic.com/index/core-views-on-ai-safety
 - Duration: 15 min read
 - Safety, capabilities, and limitations perspective
 
-### Schedule - 90 minutes total
+### Schedule - 90 minutes total  ✅
 
 **Part 1: High-Level Understanding (40 min)**
-1. Watch: "GPT in 100 Seconds" (3 min)
-2. Watch: Andrej Karpathy lecture first 30 min (30 min)
-3. Read: OpenAI text generation guide (7 min)
+1. Watch: "GPT in 100 Seconds" (3 min)  ✅
+2. Watch: Andrej Karpathy lecture first 30 min (30 min)  ✅
+3. Read: OpenAI text generation guide (7 min)  ✅
 
 **Part 2: Architecture Deep Dive (35 min)**
-4. Read: Illustrated GPT-2 walkthrough (25 min)
-5. Read: Transformer paper abstract (10 min)
+4. Read: Illustrated GPT-2 walkthrough (25 min)  ✅
+5. Read: Transformer paper abstract (10 min)  ✅
 
 **Part 3: Reflection & Application (15 min)**
-6. Document key concepts
-7. Identify payment domain applications
+6. Document key concepts  ✅
+7. Identify payment domain applications  ✅
 
-### Key Concepts to Master
+### Key Concepts to Master  ✅
 
-**What are Large Language Models (LLMs)?**
-- Neural networks trained on massive text datasets
-- Learn statistical patterns in language
-- Predict next word/token based on previous context
-- Billions of parameters (weights) that encode knowledge
-- Transformer architecture enables long-range dependencies
+**What are Large Language Models (LLMs)?**  ✅
+    - Neural networks trained on massive text datasets
+    - Learn statistical patterns in language
+    - Predict next word/token based on previous context
+    - Billions of parameters (weights) that encode knowledge
+    - Transformer architecture enables long-range dependencies
 
-**How LLMs Actually Work:**
+**How LLMs Actually Work:?**  ✅
 
-**Training Phase (Done Once):**
-- Read billions of web pages, books, code, articles
-- Learn task: "Given this text, predict next word"
-- Adjust billions of parameters to minimize errors
-- Takes weeks/months on thousands of GPUs
-- Cost: Millions of dollars
-- Result: Model file with learned patterns
+1. **Training Phase (Done Once):**  ✅
+   - Read billions of web pages, books, code, articles
+   - Learn task: "Given this text, predict next word"
+   - Adjust billions of parameters to minimize errors
+   - Takes weeks/months on thousands of GPUs
+   - Cost: Millions of dollars
+   - Result: Model file with learned patterns
 
-**Inference Phase (When You Use It):**
-- You provide input text (prompt)
-- Model predicts most likely next token
-- Samples from probability distribution
-- Generates one token at a time
-- Uses attention to consider all previous tokens
-- Continues until stop condition or max length
+2. **Inference Phase (When You Use It):**  ✅
+   - You provide input text (prompt)
+   - Model predicts most likely next token
+   - Samples from probability distribution
+   - Generates one token at a time
+   - Uses attention to consider all previous tokens
+   - Continues until stop condition or max length
 
-**The Transformer Architecture:**
+**The Transformer Architecture:**  ✅
 
-**Core Innovation: Self-Attention Mechanism**
-- Allows model to "look at" all previous words simultaneously
-- Weighs importance of each word for current prediction
-- Example: "The bank approved the loan application"
-  - Word "bank" attends to "loan", "application" → financial institution
-  - Not "river bank" because context clarifies meaning
+1. **Core Innovation: Self-Attention Mechanism**  ✅
+   - Allows model to "look at" all previous words simultaneously
+   - Weighs importance of each word for current prediction
+   - Example: "The bank approved the loan application"
+     - Word "bank" attends to "loan", "application" → financial institution
+     - Not "river bank" because context clarifies meaning
   
-**Key Components:**
+2. **Key Components:**
 
-1. **Tokenization:**
-   - Break text into smaller units (tokens)
-   - Vocabulary of ~50,000 tokens
-   - Each token has unique ID number
+   1. **Tokenization:**  ✅
+      - Break text into smaller units (tokens)
+      - Vocabulary of ~50,000 tokens
+      - Each token has unique ID number
 
-2. **Embeddings:**
-   - Convert token IDs to dense vectors
-   - Similar meanings → similar vectors
-   - Enables semantic understanding
+   2. **Embeddings:**  ✅
+      - Convert token IDs to dense vectors
+      - Similar meanings → similar vectors
+      - Enables semantic understanding
 
-3. **Positional Encoding:**
-   - Add position information to embeddings
-   - Model understands word order
-   - "Dog bites man" ≠ "Man bites dog"
+   3. **Positional Encoding:**  ✅
+      - Add position information to embeddings
+      - Model understands word order
+      - "Dog bites man" ≠ "Man bites dog"
 
-4. **Self-Attention Layers:**
-   - Weigh relevance of all tokens
-   - Multiple attention heads (8-96)
-   - Each head captures different relationships
+   4. **Self-Attention Layers:**  ✅
+      - Weigh relevance of all tokens
+      - Multiple attention heads (8-96)
+      - Each head captures different relationships
 
-5. **Feed-Forward Networks:**
-   - Process each position independently
-   - Add non-linearity and complexity
-   - Transform representations
+   5. **Feed-Forward Networks:**  ✅
+      - Process each position independently
+      - Add non-linearity and complexity
+      - Transform representations
 
-6. **Layer Normalization:**
-   - Stabilize training
-   - Improve convergence
+   6. **Layer Normalization:**  ✅
+      - Stabilize training
+      - Improve convergence
 
-7. **Output Layer:**
-   - Convert to probability distribution
-   - Over entire vocabulary
-   - Sample next token from distribution
+   7. **Output Layer:**  ✅
+      - Convert to probability distribution
+      - Over entire vocabulary
+      - Sample next token from distribution
 
-**Why Transformers Work So Well:**
+**Why Transformers Work So Well:**  ✅
 
-**Parallelization:**
-- Process all positions simultaneously
-- Unlike RNNs that process sequentially
-- Trains much faster on GPUs
+1. **Parallelization:**  ✅
+   - Process all positions simultaneously
+   - Unlike RNNs that process sequentially
+   - Trains much faster on GPUs
 
-**Long-Range Dependencies:**
-- Attention connects distant words directly
-- No degradation over distance
-- Understands complex relationships
+2. **Long-Range Dependencies:**  ✅
+   - Attention connects distant words directly
+   - No degradation over distance
+   - Understands complex relationships
 
-**Scalability:**
-- Larger models = better performance
-- More parameters = more knowledge
-- More data = better generalization
+3. **Scalability:**  ✅
+   - Larger models = better performance
+   - More parameters = more knowledge
+   - More data = better generalization  ✅
 
-### Connection to Payments Domain
+### Connection to Payments Domain  ✅
 
 **Use Case 1: Transaction Description Understanding**
 ```
@@ -219,7 +267,7 @@ LLM Response Generation:
 - Offer escalation path if needed
 ```
 
-### Attention Mechanism Deep Dive
+### Attention Mechanism Deep Dive  ✅
 
 **Analogy: Reading a Sentence Like a Human**
 
@@ -233,7 +281,7 @@ Your brain:
 
 Transformers do this with **attention scores**.
 
-**How Self-Attention Works:**
+**How Self-Attention Works:**  ✅
 
 **Input:** "The bank approved the loan application"
 
@@ -257,7 +305,7 @@ Transformers do this with **attention scores**.
 
 **Result:** "bank" representation now knows it means financial institution
 
-**Multi-Head Attention:**
+**Multi-Head Attention:**  ✅
 
 **Why Multiple Heads?**
 - Different heads learn different patterns
@@ -272,9 +320,9 @@ Transformers do this with **attention scores**.
 - Linear transformation to combine
 - Richer, more nuanced understanding
 
-### LLM Capabilities & Limitations
+### LLM Capabilities & Limitations  ✅
 
-**What LLMs Can Do Well:**
+**What LLMs Can Do Well:**  ✅
 - Text generation (articles, emails, code)
 - Summarization (long documents → key points)
 - Translation (between languages)
@@ -286,7 +334,7 @@ Transformers do this with **attention scores**.
 - Sentiment analysis (positive/negative/neutral)
 - Named entity recognition (find names, dates, amounts)
 
-**What LLMs Cannot Do:**
+**What LLMs Cannot Do:**  ✅
 - Access real-time information (training cutoff date)
 - Perform arithmetic reliably (use calculators/code)
 - Remember previous conversations (stateless API)
@@ -315,16 +363,16 @@ Transformers do this with **attention scores**.
 - Use temperature=0 for consistency
 - Verify critical information externally
 
-### Important Terminology
+### Important Terminology  ✅
 
-**Token:**
+**Token:**  
 - Basic unit of text for LLMs
 - Can be word, part of word, or character
 - "transaction" = 1 token
 - "unauthorized" = 2-3 tokens
 - Affects cost and context limits
 
-**Context Window:**
+**Context Window:**  
 - Maximum tokens model processes at once
 - GPT-3.5-Turbo: 4K or 16K tokens
 - GPT-4: 8K, 32K, or 128K tokens
@@ -351,7 +399,6 @@ Transformers do this with **attention scores**.
 - Month 3 of your plan covers this
 
 ### Reflection Questions
-
 1. What are transformers and how do they differ from previous architectures?
 2. How does the attention mechanism help LLMs understand context?
 3. What is a token and why does it matter for cost and limits?
@@ -361,7 +408,7 @@ Transformers do this with **attention scores**.
 7. What is hallucination and why is it a concern?
 8. How does the context window constraint affect conversation design?
 
-### Day 1 Deliverables
+### Day 1 Deliverables  ✅
 
 - [ ] Watched Andrej Karpathy LLM intro (full video or at least 30 min)
 - [ ] Read Illustrated GPT-2 visual guide completely
@@ -376,160 +423,162 @@ Transformers do this with **attention scores**.
 
 ---
 
-## DAY 2 (Monday Dec 16): Tokenization & Cost Analysis - 60 minutes
+## DAY 2 (Wednesday Dec 17): Tokenization & Cost Analysis - 60 minutes  ✅
 
-### Primary Resources
+### Primary Resources  ✅
 
-**"Tokenization Explained" by OpenAI (Interactive)**
+**"Tokenization Explained" by OpenAI (Interactive)**  ✅
 - Link: https://platform.openai.com/tokenizer
 - Duration: 15 min hands-on experimentation
 - Real-time tokenization visualization
 
-**"Let's Build GPT Tokenizer" by Andrej Karpathy**
+**"Let's Build GPT Tokenizer" by Andrej Karpathy**  ✅
 - Link: https://www.youtube.com/watch?v=zduSFxRajkE
 - Duration: 2:18:00 total (watch first 20 minutes only)
 - Understanding tokenization from first principles
 
-**"Understanding Tokens and Pricing" - OpenAI Guide**
+**"Understanding Tokens and Pricing" - OpenAI Guide**  ✅
 - Link: https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them
 - Duration: 10 min read
 - Practical token counting and cost calculation
 
-### Video Resources
+### Video Resources  ✅
 
-**"How Tokenization Works in LLMs"**
-- Link: https://www.youtube.com/watch?v=KkwX7FkLfug
-- Duration: 12:00
-- Visual explanation of Byte Pair Encoding
+**"How Tokenization Works in LLMs"**  ✅
+- https://www.youtube.com/watch?v=nKSk_TiR8YA
+- Duration: 12:00 
 
-### Reading Materials
+**Explanation of Byte Pair Encoding**  ✅
+- https://www.youtube.com/watch?v=4A_nfXyBD08
+
+### Reading Materials  ✅
 
 **"Byte Pair Encoding (BPE) Explained"**
-- Link: https://towardsdatascience.com/byte-pair-encoding-subword-based-tokenization-algorithm-77828a70bee0
+- Link: https://towardsdatascience.com/byte-pair-encoding-subword-based-tokenization-algorithm-77828a70bee0  ✅
 - Duration: 15 min read
 - Algorithm behind modern tokenization
 
 **"Managing Token Costs"**
-- Link: https://platform.openai.com/docs/guides/text-generation/managing-tokens
+- Link: https://platform.openai.com/docs/guides/realtime-costs#page-top  ✅
 - Duration: 10 min read
 - Cost optimization strategies
 
-### Schedule - 60 minutes total
+### Schedule - 60 minutes total  ✅
 
-**Part 1: Understanding Tokenization (25 min)**
+**Part 1: Understanding Tokenization (25 min)**  ✅
 1. Watch: Tokenization video (12 min)
 2. Read: OpenAI token guide (8 min)
 3. Experiment: Tokenizer tool (5 min)
 
-**Part 2: BPE Algorithm (15 min)**
+**Part 2: BPE Algorithm (15 min)**  ✅
 4. Read: BPE explanation (15 min)
 
 **Part 3: Cost Analysis (20 min)**
 5. Calculate costs for payment scenarios
 6. Build cost estimation framework
 
-### Key Concepts to Master
+### Key Concepts to Master  ✅
 
-**What is Tokenization?**
+**What is Tokenization?**  ✅
 - Process of breaking text into tokens
 - LLMs don't read text directly - they read token IDs
 - Each token maps to a number in vocabulary
 - Vocabulary size: ~50,000 tokens for GPT models
 - Model predicts next token ID, converts back to text
 
-**Why Tokenization Matters:**
+**Why Tokenization Matters:**  ✅
 
-**Cost Impact:**
-- Pricing based on tokens, not words or characters
-- More tokens = higher cost
-- Inefficient tokenization = wasted money
+1. **Cost Impact:**
+   - Pricing based on tokens, not words or characters
+   - More tokens = higher cost
+   - Inefficient tokenization = wasted money
 
-**Context Limits:**
-- Context window measured in tokens
-- Must fit prompt + response within limit
-- Exceeding limit causes request failure
+2. **Context Limits:**
+   - Context window measured in tokens
+   - Must fit prompt + response within limit
+   - Exceeding limit causes request failure
 
-**Performance:**
-- More tokens = longer processing time
-- Token count affects latency
-- Matters for real-time applications
+3. **Performance:**
+   - More tokens = longer processing time
+   - Token count affects latency
+   - Matters for real-time applications
 
-**Quality:**
-- Poor tokenization can confuse model
-- Important for multilingual text
-- Affects model understanding
+4. **Quality:**
+   - Poor tokenization can confuse model
+   - Important for multilingual text
+   - Affects model understanding
 
-**How Byte Pair Encoding (BPE) Works:**
+**How Byte Pair Encoding (BPE) Works:**  ✅
 
-**Goal:** Balance vocabulary size vs. token efficiency
+**Goal:** Balance vocabulary size vs. token efficiency  ✅
 
-**Algorithm Steps:**
+**Algorithm Steps:**  ✅
 
 **Step 1: Start with character vocabulary**
-```
-Text: "payment"
-Initial: ['p', 'a', 'y', 'm', 'e', 'n', 't']
-```
-
+    ```
+    Text: "payment"
+    Initial: ['p', 'a', 'y', 'm', 'e', 'n', 't']
+    ```
+    
 **Step 2: Find most frequent adjacent pairs**
-```
-Scan all text, find most common pairs
-Example: "pa" appears frequently
-```
-
+    ```
+    Scan all text, find most common pairs
+    Example: "pa" appears frequently
+    ```
+    
 **Step 3: Merge frequent pair into single token**
-```
-"pa" → single token
-Update: ['pa', 'y', 'm', 'e', 'n', 't']
-```
-
+    ```
+    "pa" → single token
+    Update: ['pa', 'y', 'm', 'e', 'n', 't']
+    ```
+    
 **Step 4: Repeat until target vocabulary size**
-```
-Merge "pay", then "payment"
-Common words become single tokens
-```
+    ```
+    Merge "pay", then "payment"
+    Common words become single tokens
+    ```
 
-**Result:**
-- Frequent words: 1 token ("payment", "transaction")
-- Rare words: Multiple tokens ("unauthorized" → 2-3 tokens)
-- Unknown words: Many character tokens
+**Result:**  ✅
+  - Frequent words: 1 token ("payment", "transaction")
+  - Rare words: Multiple tokens ("unauthorized" → 2-3 tokens)
+  - Unknown words: Many character tokens
 
-**Tokenization Examples:**
+**Tokenization Examples:**  ✅
 
-**Common Payment Terms:**
+**Common Payment Terms:**  ✅
 - "fraud" → 1 token
 - "transaction" → 1 token
 - "payment" → 1 token
 - "merchant" → 1 token
 - "chargeback" → 2 tokens: ["charge", "back"]
 
-**Technical Terms:**
+**Technical Terms:**  ✅
 - "PCI-DSS" → 3 tokens: ["PC", "I", "-", "DSS"]
 - "AML/KYC" → 4 tokens: ["AM", "L", "/", "KY", "C"]
 - "3DS" → 2 tokens: ["3", "DS"]
 - "EMV" → 2 tokens: ["E", "MV"]
 
-**Numbers:**
+**Numbers:**  ✅
 - "123" → 1 token
 - "1234" → 1 token
 - "12345" → 2 tokens: ["123", "45"]
 - "123456789" → 3-4 tokens
 - "$1,234.56" → 5-6 tokens: ["$", "1", ",", "234", ".", "56"]
 
-**Merchant Names:**
+**Merchant Names:**  ✅
 - "Starbucks" → 2 tokens: ["Star", "bucks"]
 - "McDonald's" → 2 tokens: ["McDonald", "'s"]
 - "Amazon" → 1 token
 - "Netflix" → 1 token
 
-**Whitespace and Punctuation:**
+**Whitespace and Punctuation:**  ✅
 - Space before word often part of token
 - " hello" = different token than "hello"
 - Punctuation usually separate tokens
 - "..." → 1 token
 - "!!!" → 1 token
 
-### Token Counting Rules of Thumb
+### Token Counting Rules of Thumb  ✅
 
 **English Text:**
 - 1 token ≈ 4 characters
@@ -546,9 +595,9 @@ Common words become single tokens
 - More digits = more tokens
 - Formatted numbers (commas, decimals) = extra tokens
 
-### Context Window Management
+### Context Window Management  ✅
 
-**Model Limits:**
+**Model Limits:**  ✅
 
 **GPT-3.5-Turbo:**
 - Standard: 4,096 tokens
@@ -578,7 +627,7 @@ Total used: 700 tokens
 Available for response: 4,096 - 700 = 3,396 tokens
 ```
 
-**Strategies for Long Contexts:**
+**Strategies for Long Contexts:**  ✅
 
 **Strategy 1: Summarization**
 - Summarize old messages periodically
@@ -604,9 +653,9 @@ Available for response: 4,096 - 700 = 3,396 tokens
 - Unlimited effective context
 - Week 7-11 covers this extensively
 
-### Cost Implications
+### Cost Implications  ✅
 
-**Pricing Structure (December 2024):**
+**Pricing Structure (December 2024):**  ✅
 
 **GPT-3.5-Turbo:**
 - Input: $0.0005 per 1K tokens
@@ -625,9 +674,9 @@ Available for response: 4,096 - 700 = 3,396 tokens
 - 128K context window
 - Good for: Long documents, complex analysis
 
-### Payment Domain Cost Analysis
+### Payment Domain Cost Analysis  ✅
 
-**Scenario 1: Transaction Categorization**
+**Scenario 1: Transaction Categorization**  ✅
 
 **Requirements:**
 - Categorize 10,000 transactions/day
@@ -664,7 +713,7 @@ Annual: $6,935.00
 
 **Decision:** Use GPT-3.5-Turbo for categorization
 
-**Scenario 2: Fraud Analysis**
+**Scenario 2: Fraud Analysis**  ✅
 
 **Requirements:**
 - Analyze 500 high-risk transactions/day
@@ -694,7 +743,7 @@ Annual: $1,551.25
 
 **Decision:** Use GPT-4 for fraud (accuracy > cost)
 
-**Scenario 3: Customer Support**
+**Scenario 3: Customer Support**  ✅
 
 **Requirements:**
 - Handle 2,000 support queries/day
@@ -725,7 +774,7 @@ Annual: $419.75
 
 **Decision:** Use GPT-3.5-Turbo for support
 
-### Cost Optimization Strategies
+### Cost Optimization Strategies  ✅
 
 **Strategy 1: Model Selection**
 - GPT-3.5 for simple, high-volume tasks
@@ -756,9 +805,9 @@ Annual: $419.75
 - Based on confidence scores
 - Best of both worlds
 
-### Hands-On Requirements
+### Hands-On Requirements  ✅
 
-**Exercise 1: Token Counting Practice**
+**Exercise 1: Token Counting Practice**  ✅
 
 **Requirements:**
 - Use OpenAI tokenizer tool
@@ -766,8 +815,8 @@ Annual: $419.75
 - Build intuition for token counts
 
 **Texts to Test:**
-1. "STARBUCKS STORE #1234 $5.50"
-2. "Unauthorized transaction detected at electronics store"
+1. "STARBUCKS STORE #1234 $5.50" - 14/29
+2. "Unauthorized transaction detected at electronics store" 8/56
 3. "PCI-DSS Requirement 3.2.1: Mask PAN when displayed"
 4. "Transaction ID: TXN-2024-12-15-ABC123XYZ for amount $1,234.56"
 5. "Customer dispute: Product not received within 5-7 business days"
@@ -828,7 +877,7 @@ Annual: $419.75
 
 ---
 
-**Exercise 3: Context Window Planning**
+**Exercise 3: Context Window Planning**  ✅
 
 **Requirements:**
 - Design conversation handling
@@ -863,7 +912,7 @@ User: "Investigate transaction TXN-123"
 - [ ] Can prevent context overflow
 - [ ] Maintains conversation quality
 
-### Day 2 Deliverables
+### Day 2 Deliverables  ✅
 
 - [ ] Watched tokenization explanation video
 - [ ] Used OpenAI tokenizer tool hands-on
@@ -881,21 +930,21 @@ User: "Investigate transaction TXN-123"
 
 ---
 
-## DAY 3 (Tuesday Dec 17): OpenAI API Setup & First Calls - 60 minutes
+## DAY 3 (Thursday Dec 18): OpenAI API Setup & First Calls - 60 minutes
 
 ### Primary Resources
 
-**"OpenAI API Quickstart Tutorial"**
+**"OpenAI API Quickstart Tutorial"**  ✅
 - Link: https://platform.openai.com/docs/quickstart
 - Duration: 20 min read
 - Official getting started guide
 
-**"Chat Completions API Reference"**
+**"Chat Completions API Reference"**  ✅
 - Link: https://platform.openai.com/docs/guides/text-generation/chat-completions-api
 - Duration: 25 min read
 - Complete API documentation
 
-**"API Best Practices for Production"**
+**"API Best Practices for Production"**  ✅
 - Link: https://platform.openai.com/docs/guides/production-best-practices
 - Duration: 15 min read
 - Production deployment guidelines
@@ -903,9 +952,11 @@ User: "Investigate transaction TXN-123"
 ### Video Resources
 
 **"OpenAI API Tutorial for Beginners"**
-- Link: https://www.youtube.com/watch?v=c-g6epk3fFE
-- Duration: 15:00
-- Hands-on walkthrough
+- Link: https://www.youtube.com/watch?v=xP_ZON_P4Ks
+- Link: https://www.youtube.com/watch?v=9ZyHckE3iIo
+- Link: https://www.youtube.com/watch?v=czvVibB2lRA (prequel - https://www.youtube.com/watch?v=tFHeUSJAYbE)
+- Link: https://www.youtube.com/watch?v=YVFWBJ1WVF8
+- Link: https://www.youtube.com/watch?v=CbpsDMwFG2g&pp=ugUEEgJlbg%3D%3D
 
 ### Reading Materials
 
@@ -1319,7 +1370,7 @@ Make API call to categorize transaction:
 
 ---
 
-## DAY 4 (Wednesday Dec 18): Advanced Parameters & Conversation Management - 60 minutes
+## DAY 4 (Friday Dec 19): Advanced Parameters & Conversation Management - 60 minutes
 
 ### Primary Resources
 
@@ -1805,7 +1856,7 @@ Bot: "PAN masking best practices:
 
 ---
 
-## DAY 5 (Thursday Dec 19): Prompt Engineering Basics - 60 minutes
+## DAY 5 (Saturday Dec 20): Prompt Engineering Basics - 60 minutes
 
 ### Primary Resources
 
@@ -2297,7 +2348,7 @@ Confidence: [0-100]
 
 ---
 
-## DAY 6 (Saturday Dec 21): Build Payment Q&A System - 180-240 minutes
+## DAY 6 (Sunday Dec 21): Build Payment Q&A System - 180-240 minutes
 
 ### Goal
 Build production-ready payment transaction Q&A system using OpenAI API with optimized prompts.
@@ -2963,7 +3014,7 @@ LLM-powered transaction analysis and customer support.
 
 ---
 
-## DAY 7 (Sunday Dec 22): Testing, Optimization & Documentation - 180 minutes
+## DAY 7 (Monday Dec 22): Testing, Optimization & Documentation - 180 minutes
 
 ### Goal
 Comprehensive testing, cost optimization, performance tuning, and professional documentation.

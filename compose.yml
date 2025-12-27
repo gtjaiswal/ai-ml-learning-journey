@@ -1,4 +1,31 @@
 services:
+
+  opensearch-node:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch-node
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=YourStrongPassword123! # Required for security
+    ports:
+      - "9200:9200" # REST API port
+      - "9600:9600" # Performance Analyzer port
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data # Persist data
+    networks:
+      - al_ml_learning_network
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    ports:
+      - "5601:5601" # Browser UI port
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch-node:9200"]'
+    depends_on:
+      - opensearch-node
+    networks:
+      - al_ml_learning_network
+
   book_service:
     build:
       context: .
@@ -101,6 +128,7 @@ services:
 
 volumes:
   postgres_data:
+  opensearch-data:
 
 networks:
   al_ml_learning_network:
