@@ -1,0 +1,24 @@
+[
+    {
+        "txn_id": "TXN_101",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T09:00:00Z",
+            "amount": 4.50,
+            "merchant": "Daily Grind Coffee",
+            "category": "Food & Drink",
+            "location": "London, UK"
+        }
+    },
+        {
+        "txn_id": "TXN_102",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T09:00:00Z",
+            "amount": 4.50,
+            "merchant": "Daily Grind Coffee",
+            "category": "Food & Drink",
+            "location": "India, UK"
+        }
+    }
+]

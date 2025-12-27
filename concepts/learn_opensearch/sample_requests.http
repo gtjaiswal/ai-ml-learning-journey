@@ -1,0 +1,44 @@
+### Create Index
+PUT http://localhost:9200/payment_cards
+Content-Type: application/json
+
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "properties": {
+      "card_name": {"type": "text"},
+      "card_type": {"type": "keyword"}
+    }
+  }
+}
+
+### Insert Document 1
+POST http://localhost:9200/payment_cards/_doc/1
+Content-Type: application/json
+
+{
+  "card_name": "Premium Gold Card",
+  "card_type": "credit"
+}
+
+### Insert Document 2
+POST http://localhost:9200/payment_cards/_doc/2
+Content-Type: application/json
+
+{
+  "card_name": "Basic Silver Card",
+  "card_type": "debit"
+}
+
+### Search All Documents
+GET http://localhost:9200/payment_cards/_search
+Content-Type: application/json
+
+### Get Mapping
+GET http://localhost:9200/payment_cards/_mapping
+
+### Count Documents
+GET http://localhost:9200/payment_cards/_count

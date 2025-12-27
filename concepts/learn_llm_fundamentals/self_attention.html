@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Self-Attention Visualizer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h2 { margin-bottom: 5px; color: #2c3e50; }
+        p { margin-top: 0; color: #666; font-size: 0.9em; }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* Visualization Layout */
+        .flow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .token-box {
+            width: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .token-header { font-weight: bold; margin-bottom: 8px; font-size: 1.1em; }
+        .vector-display { font-family: monospace; font-size: 0.85em; color: #555; }
+
+        /* Colors for Tokens */
+        .token-a { border-color: #3498db; background-color: #ebf5fb; }
+        .token-b { border-color: #e74c3c; background-color: #fdedec; }
+        .token-out { border-color: #8e44ad; background-color: #f4ecf7; border-width: 3px; }
+
+        /* Slider Section */
+        .control-panel {
+            background-color: #fafafa;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        input[type=range] {
+            width: 100%;
+            max-width: 400px;
+            margin: 15px 0;
+        }
+
+        .math-breakdown {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+
+        .calc-box {
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            width: 45%;
+        }
+
+        .arrow { font-size: 24px; color: #aaa; }
+
+        /* Dynamic Bars */
+        .bar-container {
+            display: flex;
+            height: 20px;
+            width: 100%;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .bar-a { background-color: #3498db; transition: width 0.1s; }
+        .bar-b { background-color: #e74c3c; transition: width 0.1s; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Self-Attention Mechanism: "The" vs "Bank"</h2>
+        <p>Visualize how the word <strong>"The"</strong> (Output) decides how much information to borrow from <strong>"Bank"</strong>.</p>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+        <div class="flow-diagram">
+            <div class="token-box token-a">
+                <div class="token-header">Word 1: "The"</div>
+                <div class="vector-display">Value: [1.0, 0.0]</div>
+                <div style="font-size:0.8em; color:#3498db; margin-top:5px;">Pure Grammar</div>
+            </div>
+
+            <div class="token-box token-b">
+                <div class="token-header">Word 2: "Bank"</div>
+                <div class="vector-display">Value: [0.0, 10.0]</div>
+                <div style="font-size:0.8em; color:#e74c3c; margin-top:5px;">Rich Context</div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h3>🎛️ Adjust Attention Score</h3>
+            <p>Drag to change the raw similarity score (Dot Product) between "The" and "Bank".</p>
+
+            <input type="range" id="scoreSlider" min="-5" max="5" step="0.1" value="0">
+
+            <div style="margin-top: 10px; font-weight: bold;">
+                Raw Score ("The" · "Bank"): <span id="rawScoreVal">0.0</span>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h4>Step 3: Softmax (The Percentage Split)</h4>
+            <p>Convert raw scores into probabilities. ("The" always attends to itself with score 1.0)</p>
+
+            <div class="bar-container">
+                <div id="barA" class="bar-a" style="width: 50%;"></div>
+                <div id="barB" class="bar-b" style="width: 50%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-top: 5px;">
+                <span id="labelA" style="color: #3498db;">Self-Attention: 50%</span>
+                <span id="labelB" style="color: #e74c3c;">Attention to "Bank": 50%</span>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="arrow">⬇️</div>
+        </div>
+
+        <div class="flow-diagram" style="justify-content: center; margin-top: 20px;">
+            <div class="token-box token-out" id="outputBox">
+                <div class="token-header">Final "The" Vector</div>
+                <div class="vector-display" id="outputVector">[0.5, 5.0]</div>
+                <div id="outputMeaning" style="font-size:0.8em; color:#8e44ad; margin-top:5px; font-weight:bold;">Mixed Meaning</div>
+            </div>
+        </div>
+
+        <div class="math-breakdown">
+            <div class="calc-box">
+                <strong>Softmax Logic:</strong><br>
+                e^(Self) = <span id="expSelf">2.71</span><br>
+                e^(Bank) = <span id="expBank">1.00</span><br>
+                Sum = <span id="expSum">3.71</span>
+            </div>
+            <div class="calc-box">
+                <strong>Weighted Sum Logic:</strong><br>
+                (Weight_A * [1, 0]) + <br>
+                (Weight_B * [0, 10]) <br>
+                = Result
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slider = document.getElementById('scoreSlider');
+        const rawScoreDisplay = document.getElementById('rawScoreVal');
+
+        // Softmax Elements
+        const barA = document.getElementById('barA');
+        const barB = document.getElementById('barB');
+        const labelA = document.getElementById('labelA');
+        const labelB = document.getElementById('labelB');
+
+        // Math Elements
+        const expSelfDisplay = document.getElementById('expSelf');
+        const expBankDisplay = document.getElementById('expBank');
+        const expSumDisplay = document.getElementById('expSum');
+
+        // Output Elements
+        const outVectorDisplay = document.getElementById('outputVector');
+        const outBox = document.getElementById('outputBox');
+        const outMeaning = document.getElementById('outputMeaning');
+
+        // Constants
+        const selfScore = 1.0; // "The" attending to itself is constant for this demo
+        const vecA = [1.0, 0.0];
+        const vecB = [0.0, 10.0];
+
+        function update() {
+            // 1. Get Score
+            const bankScore = parseFloat(slider.value);
+            rawScoreDisplay.innerText = bankScore.toFixed(1);
+
+            // 2. Calculate Softmax
+            // We use Math.exp(score)
+            const expSelf = Math.exp(selfScore);
+            const expBank = Math.exp(bankScore);
+            const sum = expSelf + expBank;
+
+            const weightA = expSelf / sum;
+            const weightB = expBank / sum;
+
+            // 3. Update Visuals (Bars)
+            const pctA = (weightA * 100).toFixed(1);
+            const pctB = (weightB * 100).toFixed(1);
+
+            barA.style.width = pctA + "%";
+            barB.style.width = pctB + "%";
+
+            labelA.innerText = `Self: ${pctA}%`;
+            labelB.innerText = `To Bank: ${pctB}%`;
+
+            // 4. Update Math Box
+            expSelfDisplay.innerText = expSelf.toFixed(2);
+            expBankDisplay.innerText = expBank.toFixed(2);
+            expSumDisplay.innerText = sum.toFixed(2);
+
+            // 5. Calculate Weighted Sum (The Output Vector)
+            // Out = (wA * vA) + (wB * vB)
+            // vA is [1, 0], vB is [0, 10]
+            const finalX = (weightA * vecA[0]) + (weightB * vecB[0]); // (wA*1) + (wB*0) = wA
+            const finalY = (weightA * vecA[1]) + (weightB * vecB[1]); // (wA*0) + (wB*10) = wB*10
+
+            outVectorDisplay.innerText = `[${finalX.toFixed(2)}, ${finalY.toFixed(2)}]`;
+
+            // 6. Interactive Formatting of Output Box
+            // Change color based on which word dominates
+            if (weightB > 0.8) {
+                outBox.style.backgroundColor = "#fadbd8"; // Reddish
+                outMeaning.innerText = "Heavily Influenced by Context";
+            } else if (weightB < 0.2) {
+                outBox.style.backgroundColor = "#d6eaf8"; // Blueish
+                outMeaning.innerText = "Ignoring Context (Stopword)";
+            } else {
+                outBox.style.backgroundColor = "#f4ecf7"; // Purple mix
+                outMeaning.innerText = "Balanced Mix";
+            }
+        }
+
+        // Init
+        slider.addEventListener('input', update);
+        update();
+    </script>
+</body>
+</html>

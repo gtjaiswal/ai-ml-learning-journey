@@ -1,0 +1,17 @@
+# write the content of a Modelfile for a "Storyteller" model.
+
+# Base: llama3
+
+# System: "You are a fantasy novelist."
+
+# Temperature: High (0.9) for creativity.
+
+# Context: Large (8192) so it remembers long stories.
+
+FROM llama3.1:latest
+
+SYSTEM "You are a fantasy novelist."
+
+PARAMETER temperature 0.9
+
+PARAMETER num_ctx 8192

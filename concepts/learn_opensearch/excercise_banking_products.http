@@ -1,0 +1,107 @@
+###
+PUT {{baseUrl}}/banking_products
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "properties": {
+      "product_code": {
+        "type": "keyword"
+      },
+      "product_name": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "description": {
+        "type": "text"
+      },
+      "annual_fee": {
+        "type": "double"
+      },
+      "interest_rate": {
+        "type": "double"
+      },
+      "category": {
+        "type": "keyword"
+      },
+      "status": {
+        "type": "keyword"
+      },
+      "launch_date": {
+        "type": "date"
+      },
+      "is_premium": {
+        "type": "boolean"
+      },
+      "features": {
+        "type": "text"
+      }
+    }
+  }
+}
+
+###
+GET {{baseUrl}}/banking_products/_mapping
+Accept: application/json
+Authorization: Basic {{username}} {{password}}
+
+###
+POST {{baseUrl}}/banking_products/_doc/1
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+"product_code": "CC-PLAT-001",
+"product_name": "Platinum Rewards Card",
+"description": "Premium credit card with cashback rewards and travel benefits",
+"annual_fee": 195.00,
+"interest_rate": 18.99,
+"category": "credit_card",
+"status": "ACTIVE",
+"launch_date": "2023-06-15",
+"is_premium": true,
+"features": ["cashback", "travel insurance", "airport lounge access", "concierge service"]
+}
+
+###
+POST {{baseUrl}}/banking_products/_doc/2
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "product_code": "CC-GOLD-002",
+  "product_name": "Gold Cashback Card",
+  "description": "Mid-tier credit card with generous cashback on groceries and fuel",
+  "annual_fee": 99.00,
+  "interest_rate": 16.99,
+  "category": "credit_card",
+  "status": "ACTIVE",
+  "launch_date": "2023-08-20",
+  "is_premium": false,
+  "features": [
+    "cashback",
+    "fuel rewards",
+    "dining benefits"
+  ]
+}
+
+###
+POST {{baseUrl}}/banking_products/_bulk
+Content-Type: application/x-ndjson
+Authorization: Basic {{username}} {{password}}
+
+< ./bulk_data.ndjson
+
+###
+GET {{baseUrl}}/banking_products/_count
+Accept: application/json
+Authorization: Basic {{username}} {{password}}

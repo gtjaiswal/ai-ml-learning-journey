@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Attention Lab 🧪</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #475569;
+            --highlight: #f59e0b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --success: #10b981;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 0; color: #1e293b; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Layout */
+        .sidebar { width: 350px; background: white; border-right: 1px solid #e2e8f0; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; box-shadow: 4px 0 15px rgba(0,0,0,0.02); z-index: 10; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
+
+        h1 { font-size: 20px; margin: 0 0 10px 0; color: var(--primary); }
+        h2 { font-size: 16px; margin: 0 0 10px 0; color: var(--secondary); border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
+        p { font-size: 14px; line-height: 1.6; color: #64748b; margin-bottom: 10px; }
+        
+        /* Mode Switcher */
+        .mode-switch { display: flex; background: #f1f5f9; padding: 4px; border-radius: 8px; margin-bottom: 20px; }
+        .mode-btn { flex: 1; padding: 8px; text-align: center; cursor: pointer; border-radius: 6px; font-size: 13px; font-weight: 600; color: #64748b; transition: all 0.2s; }
+        .mode-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        /* Sentence Tokens */
+        .sentence-container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 8px; min-height: 60px; align-items: center; }
+        .token { 
+            padding: 8px 14px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; font-size: 15px; opacity: 0; animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .token:hover { background: #e2e8f0; transform: translateY(-1px); }
+        .token.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .token.generating { border-color: var(--highlight); background: #fffbeb; color: #b45309; }
+
+        /* Generation Controls */
+        .gen-controls { display: none; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .gen-controls.visible { display: flex; }
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-primary:disabled { background: #cbd5e1; cursor: not-allowed; }
+        .btn-reset { background: white; border: 1px solid #cbd5e1; color: #64748b; padding: 10px 15px; border-radius: 6px; cursor: pointer; }
+
+        /* Cards */
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* Explanation Box */
+        .explanation-box { background: #eff6ff; border-left: 4px solid var(--primary); padding: 15px; border-radius: 4px; font-size: 13px; }
+        .math-step { margin-top: 10px; padding: 10px; background: #fff; border: 1px dashed #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 12px; color: #334155; }
+        .matrix-note { margin-top: 15px; padding: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; color: #166534; font-size: 13px; display: none; }
+
+        /* Highlight text */
+        .hl-query { color: var(--primary); font-weight: bold; }
+        .hl-key { color: #e11d48; font-weight: bold; }
+        .hl-value { color: #059669; font-weight: bold; }
+
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR: The Narrative & Explanation -->
+<div class="sidebar">
+    <div>
+        <h1>Attention Lab 🧪</h1>
+        <div class="mode-switch">
+            <div class="mode-btn active" onclick="setMode('explore')" id="btn-explore">Explore Mode</div>
+            <div class="mode-btn" onclick="setMode('generate')" id="btn-generate">Generation Mode</div>
+        </div>
+    </div>
+
+    <div id="narrative-panel">
+        <!-- Dynamic content will go here -->
+    </div>
+
+    <div class="explanation-box" id="static-legend">
+        <strong>The Core Mechanism:</strong>
+        <br><br>
+        1. <span class="hl-query">Query (Q)</span>: What am I looking for?
+        <br>
+        2. <span class="hl-key">Key (K)</span>: What do I contain?
+        <br>
+        3. <span class="hl-value">Value (V)</span>: What information do I pass on?
+        <br><br>
+        <em>Score = Q · K (Similarity)</em>
+    </div>
+</div>
+
+<!-- MAIN CONTENT: Visualizations -->
+<div class="main-content">
+    
+    <!-- Generation Controls -->
+    <div class="gen-controls" id="gen-controls">
+        <button class="btn-primary" id="btn-next-token" onclick="generateNextToken()">✨ Generate Next Token</button>
+        <button class="btn-reset" onclick="resetGeneration()">↺ Reset</button>
+        <span style="font-size: 14px; color: #64748b; margin-left: 10px;" id="gen-status">Start the sequence...</span>
+    </div>
+
+    <!-- 1. Input Sentence -->
+    <div class="sentence-container" id="sentence-display"></div>
+
+    <!-- 2. The Calculation Flow -->
+    <div class="grid-2">
+        
+        <!-- Left: Query & Key Matching -->
+        <div class="card">
+            <h2>Step 1: Matching (Query vs Keys)</h2>
+            <p id="match-desc">Comparing the Query vector of the selected word against all Key vectors.</p>
+            <div id="scores-viz" style="height: 250px;"></div>
+        </div>
+
+        <!-- Right: The Resulting Focus -->
+        <div class="card">
+            <h2>Step 2: Attention Distribution</h2>
+            <p>After applying Softmax, here is where the word is focusing its attention.</p>
+            <div id="pie-viz" style="height: 250px;"></div>
+        </div>
+    </div>
+
+    <!-- 3. The Big Picture -->
+    <div class="card" style="flex: 1; min-height: 300px;">
+        <h2>Global Attention Matrix</h2>
+        <p>How every word in the sentence attends to every other word.</p>
+        <div id="heatmap-viz" style="height: 100%;"></div>
+    </div>
+
+</div>
+
+<script>
+    const data = {"tokens": ["the", "animal", "did", "not", "cross", "the", "street", "because", "it", "was", "too", "tired"], "queries": [[-3.9904339990304427, -6.861195572767934, 0.9042715813753476, 2.4624651848005796, 0.33105106090903336, -2.144877643368047, -1.0779371846642842, -2.1636085144899018], [1.2735251921740491, 1.9227293718889058, 0.34806499634225146, 1.0860478780731002, -4.935395668910562, -5.344812294317211, -0.7096563862875065, 6.271296024493965], [-3.589139968845956, 0.2936697083806381, -4.797623414649676, 0.6470775821760751, -1.548045117622158, 1.7512929650443452, -1.1372561793807323, -5.130866793262679], [-3.608246632631581, -0.16514973526878862, -4.18989664951128, 0.3570862237711881, -5.869344411066623, 0.5649616055824165, -3.0324952116406134, -3.483408591683068], [-0.055874051668578846, -1.0552775505402034, -1.6908838961639676, 5.623578223415716, 3.5653642641858907, -4.327262422589379, 2.276330591062683, -1.7168010519842967], [-3.9904339990304427, -6.861195572767934, 0.9042715813753476, 2.4624651848005796, 0.33105106090903336, -2.144877643368047, -1.0779371846642842, -2.1636085144899018], [-5.294361541321992, -4.518230918712391, -4.786591178753306, 2.672313097367293, 6.8123589362772545, 1.058799548627676, -0.1076687174305814, -5.165769560349879], [-3.0948543852705304, 0.5018181720837251, -3.5367296774046535, -0.030690870704996584, -4.275862031340217, 0.9732742898106981, -3.7344432473394353, -4.2326186544129545], [-5.3464752881416215, -1.8379508114295071, -1.7741918528736833, 2.718010560973657, -3.83125907892693, -0.17763121192205447, -1.224915418638353, -2.892809926648976], [-5.792688435451988, -3.679840231945744, 2.285540446522037, 3.2459962721904354, -1.6215092821403994, -1.2123166807928685, -1.4763602639011644, -2.8785661527096407], [-3.481572828370517, -1.866798864747705, -5.563351730125698, 0.40637911672216265, -4.22095480255233, 0.6005385176881038, -4.289737078974519, -8.330045676863602], [-2.9826353754438673, -1.9586889053738838, -2.1701950272120323, -1.4382575643723303, -0.8824126843228941, 1.5474339377296362, -4.598538677353479, -8.266019292891514]], "keys": [[1.045888009714414, 8.714545336350861, -2.945606542085246, -11.212142138864406, -2.9873492524987566, -5.238156211845303, -13.14396719596558, 1.0826965294576705], [-1.8735437211810222, 6.103121004514981, -4.963079062732326, 1.5886316218242629, -4.450004233757194, -8.61613703812594, -13.262196010451348, -0.0030267415510185545], [0.694507955626355, 5.654325414244983, -4.7121490159515345, -2.311108926079021, 0.043086826450492416, -7.8675117840288875, -6.491948044853012, 9.17908540486378], [-1.5190578377596073, 5.801402280585502, -4.706530602495279, -5.853262919602615, -0.9585132303612637, -11.836427935654973, -11.270712334575583, 9.562828943830374], [-0.5571964830292602, 8.730590922004428, 0.8400273857040633, -5.71405206987983, -6.274283847877383, -5.3264269032005815, -4.008033763859637, -5.299578892614476], [1.045888009714414, 8.714545336350861, -2.945606542085246, -11.212142138864406, -2.9873492524987566, -5.238156211845303, -13.14396719596558, 1.0826965294576705], [2.311002107745211, 14.519101092493916, 8.783170107424654, -9.1264926906111, 3.6312377648420515, 1.6331335064354624, -8.171976416347754, 3.837413874449733], [-1.8851833567100165, 5.769007343580245, -4.775154505639426, -7.812264625879859, -1.3402004007055695, -9.224818069304824, -11.00726916047806, 8.014717351999707], [-0.027069635069615468, 8.27240574264504, -1.5430233138066758, -8.536985461587266, -1.8926301425938667, -7.63386711386652, -12.47582744589039, 6.92626040833857], [3.271408253887638, 6.636197131959471, -7.110426191429446, -7.985427722355971, -2.5014540048396454, -4.027438609610999, -7.4946964695573595, 4.421535339343518], [-2.6150893491540343, 4.007501898178487, -0.5278613802413278, -7.51868990227185, -2.6129249323517865, -7.799031785486226, -5.225469968217323, 10.901507593421472], [-3.558609004832447, -1.2266658040170757, -0.08461807506315616, -1.6847999677808876, 0.6112238626208553, -6.158584415303325, -0.026000629330453853, 8.994449283629914]], "values": [[3.504871426502013, -1.924028840474331, 4.237304922132458, -0.8346227667327281, -3.6355302389024473, 3.26125158146212, -2.5624725013941547, -8.194713238589157], [0.41311031755611805, -5.963710694905306, 5.0685379613715495, 1.883730708671994, 2.0563779093017986, 9.894839860192132, -4.732906434428034, -7.164853801958047], [4.162987688399924, -5.418215882771016, 0.9097210690331934, -0.6815678569408503, 1.6928386961912705, 0.899785619833686, -2.2225466291965703, -6.080222055589099], [6.134920631042367, -8.359774821319467, -0.11519557546559374, -0.48497443843379656, 1.5286149892411935, 0.6340609093006683, -1.2464967986350082, -9.460936122462813], [12.107459809126635, -6.2289153326115105, 8.233277414205862, 4.464679238039709, 3.85690095834642, 0.42797899279775914, 0.22218691763782467, -9.42833833148068], [3.504871426502013, -1.924028840474331, 4.237304922132458, -0.8346227667327281, -3.6355302389024473, 3.26125158146212, -2.5624725013941547, -8.194713238589157], [-0.2169317793589954, 2.603568438539307, 8.589379506757407, 0.12165582756594258, -4.887096808077487, -4.44098552514118, -1.8097561080289812, -6.483537040643764], [5.910753377989165, -5.805916133027798, 1.6314115316725288, 0.550920598305289, -0.47744718214875864, -1.1509551668937132, -1.7380994465927457, -8.061924682711936], [3.8654173120448827, -3.4025278542481616, 2.0448370491306465, -1.8478312168557842, 0.5502660124964098, -0.1305262333941216, -1.9325587583221957, -7.539740695852467], [0.16495057122143128, -3.7410153681287848, 4.574978719145576, 1.9849370310583438, -0.29804260419405415, -5.393815833307994, 1.3747099239882976, -1.2471113059840602], [4.147220159864638, -10.040274762541827, -1.6996126677988512, 2.4228970787579382, 0.16281008009091563, -4.881644977163064, -1.608616928632333, -8.179792710411798], [1.7413709760757339, -8.718411272117628, -4.127581556420844, 2.0705687601942695, 2.675885866066155, -5.8674096839060805, -1.9057786554111626, -7.982423889677409]], "attention_weights": [[1.0424730312175284e-13, 0.0034379854526823653, 6.409378250480942e-10, 3.8842362468862655e-08, 1.1429248661245161e-09, 1.0424730312175284e-13, 7.589558223987141e-22, 4.883493345205241e-09, 1.3811976004493798e-12, 1.1681370674756973e-14, 1.7465941617162377e-08, 0.9965619515700562], [5.249459298717534e-12, 1.791157730503512e-08, 0.00011766722854662493, 0.9937966356537409, 8.967261415929015e-16, 5.249459298717534e-12, 1.2938822718528428e-17, 0.00016304862602247274, 3.904016492139489e-05, 1.244227319567373e-10, 0.005883589582191549, 6.980770424120545e-10], [2.6762190354743374e-05, 0.9817647642146431, 5.027929512986862e-12, 1.882825843879836e-11, 0.01818048155639392, 2.6762190354743374e-05, 6.240844044420084e-17, 1.9845971090298934e-09, 4.042523292527482e-11, 1.227799313104548e-06, 8.372821272680677e-15, 5.3602704450237154e-14], [4.524955073992426e-06, 0.9999575522480718, 1.463571606649435e-14, 5.867934887524619e-11, 3.339235419130232e-05, 4.524955073992426e-06, 1.655869196299656e-23, 1.530338714901184e-09, 7.491938083264117e-11, 3.823628072850263e-09, 8.952618778743314e-15, 3.004538812407957e-18], [4.595345218952318e-15, 0.2377429944327237, 0.007989010624158481, 1.4286865341966245e-05, 3.740717604767466e-08, 4.595345218952318e-15, 3.436990521467839e-17, 1.1106089632044366e-08, 3.742574021169381e-12, 2.5319538622142635e-10, 1.2700282656570073e-09, 0.7542536580375347], [1.0424730312175284e-13, 0.0034379854526823653, 6.409378250480942e-10, 3.8842362468862655e-08, 1.1429248661245161e-09, 1.0424730312175284e-13, 7.589558223987141e-22, 4.883493345205241e-09, 1.3811976004493798e-12, 1.1681370674756973e-14, 1.7465941617162377e-08, 0.9965619515700562], [1.1409341759707659e-10, 0.5774072245328952, 4.237509550822477e-07, 8.885479038557517e-09, 1.0446203014448841e-06, 1.1409341759707659e-10, 1.0243620804534463e-17, 5.811870500772991e-08, 2.585869883572779e-13, 1.0921957835515433e-08, 1.240965471043366e-12, 0.4225912289400201], [0.0003542769291779736, 0.9990988077274542, 8.692650384485665e-15, 3.7263409592559756e-11, 0.00019262472927477115, 0.0003542769291779736, 1.1387834971034992e-18, 1.9284560288592593e-09, 9.845734165830128e-10, 1.0734612245427415e-08, 1.1108346415664396e-15, 1.6175183253566338e-19], [2.217944431184803e-13, 0.9999999059379707, 1.3666168471719247e-14, 7.199846681238483e-13, 9.40480136831624e-08, 2.217944431184803e-13, 1.2730450285542013e-24, 1.4439487446582799e-12, 6.109360777826324e-15, 5.275623229693155e-15, 3.643028622646199e-14, 1.1346415454600451e-11], [5.69669703374731e-12, 0.9988727984926677, 1.8286547644967195e-11, 1.9331288884634555e-09, 6.697901232250995e-05, 5.69669703374731e-12, 1.7163449264821478e-16, 7.297382108783318e-10, 1.6766547330982662e-11, 9.871516287837114e-16, 4.068016643675326e-09, 0.001060215717678312], [1.163049090033315e-07, 0.9999800412771426, 1.7839219269333967e-21, 1.2785560011896807e-17, 1.972611194997976e-05, 1.163049090033315e-07, 2.411037577638316e-30, 3.490534111874384e-15, 7.762797697469493e-17, 1.0860345477968044e-12, 1.922347059638209e-24, 2.2390188669110763e-25], [0.007229990475002371, 0.9701617557012702, 3.589675672941803e-19, 2.4255375233990443e-15, 0.015378263076695911, 0.007229990475002371, 7.83416535212522e-16, 2.9432909413653195e-12, 1.324823002301028e-10, 1.3660034992878102e-10, 4.1450780825459313e-20, 7.760255840281939e-21]], "context_vectors": [[1.7368046816948435, -8.708940641571486, -4.095965187549726, 2.069926314126669, 2.673755903583204, -5.813218994947022, -1.9154982457422218, -7.979613157306397], [6.122868527102823, -8.3687060899801, -0.12402783566676476, -0.4677731088476939, 1.5202332068411617, 0.6013192932862914, -1.2488492156412012, -9.452697447302423], [0.6258844138867876, -5.9683132920623345, 5.126029344336644, 1.9305082190294762, 2.0888047336709845, 9.722353918142774, -4.642696774936152, -7.206052899321921], [0.41352880763548316, -5.963682983163199, 5.068636109209977, 1.8837922896934651, 2.0563865087240036, 9.89446362938637, -4.732721301612929, -7.164938684078918], [1.4449958381627546, -8.037129963234797, -1.9009676448346655, 2.004126036067063, 2.5207322293659553, -2.0658889082166207, -2.5804296402040783, -7.772876795021912], [1.7368046816948435, -8.708940641571486, -4.095965187549726, 2.069926314126669, 2.673755903583204, -5.813218994947022, -1.9154982457422218, -7.979613157306397], [0.9744357951191678, -7.127823030001217, 1.1823398051060248, 1.9626883415175702, 2.3181780859333116, 3.2338368607840797, -3.538180519724631, -7.510353663081538], [0.41755362927419964, -5.960899421115898, 5.068558579977954, 1.8823017580942223, 2.0526916794241443, 9.888315858475815, -4.730414017349667, -7.166019454590098], [0.41311141741516644, -5.963710719878349, 5.068538258895275, 1.8837309514023226, 2.0563780786377843, 9.894838969647463, -4.732905968371273, -7.164854014846945], [0.4153018667870928, -5.9666490559007945, 5.0590000218417535, 1.8841016631955063, 2.0571553079611937, 9.877494308006842, -4.7295771601097885, -7.165872217793763], [0.4133417207771099, -5.963714986689603, 5.068600196022774, 1.8837809884360195, 2.0564121026247486, 9.894651572780443, -4.732808184830963, -7.164898691256269], [0.637655907725303, -5.909375358290562, 5.10518654285589, 1.8841138741898198, 2.0017619425048387, 9.653334419673088, -4.62532127075134, -7.214554009601892]]};
+    let currentMode = 'explore';
+    let selectedIndex = 8; // Default to "it"
+    let genIndex = 0; // For generation mode
+
+    function init() {
+        setMode('explore');
+    }
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('btn-explore').className = `mode-btn ${mode === 'explore' ? 'active' : ''}`;
+        document.getElementById('btn-generate').className = `mode-btn ${mode === 'generate' ? 'active' : ''}`;
+        
+        const genControls = document.getElementById('gen-controls');
+        
+        if (mode === 'explore') {
+            genControls.className = 'gen-controls';
+            selectedIndex = 8; // Reset to interesting word
+            renderSentenceFull();
+            updateView(selectedIndex);
+        } else {
+            genControls.className = 'gen-controls visible';
+            resetGeneration();
+        }
+    }
+
+    // --- EXPLORE MODE FUNCTIONS ---
+    function renderSentenceFull() {
+        const container = document.getElementById('sentence-display');
+        container.innerHTML = '';
+        data.tokens.forEach((token, idx) => {
+            createTokenElement(container, token, idx, true);
+        });
+    }
+
+    function createTokenElement(container, token, idx, clickable) {
+        const el = document.createElement('div');
+        el.className = `token ${idx === selectedIndex ? 'active' : ''}`;
+        el.innerText = token;
+        if (clickable) {
+            el.onclick = () => {
+                selectedIndex = idx;
+                // Update active classes manually to avoid full re-render flicker
+                Array.from(container.children).forEach((child, i) => {
+                    child.className = `token ${i === idx ? 'active' : ''}`;
+                });
+                updateView(idx);
+            };
+        }
+        container.appendChild(el);
+    }
+
+    // --- GENERATION MODE FUNCTIONS ---
+    function resetGeneration() {
+        genIndex = 0;
+        document.getElementById('sentence-display').innerHTML = '';
+        document.getElementById('btn-next-token').disabled = false;
+        document.getElementById('btn-next-token').innerText = "✨ Start Generation";
+        document.getElementById('gen-status').innerText = "Ready to generate...";
+        
+        // Clear charts
+        Plotly.purge('scores-viz');
+        Plotly.purge('pie-viz');
+        Plotly.purge('heatmap-viz');
+        document.getElementById('narrative-panel').innerHTML = '<p>Click "Start Generation" to begin building the sentence token by token.</p>';
+    }
+
+    function generateNextToken() {
+        if (genIndex >= data.tokens.length) return;
+
+        const container = document.getElementById('sentence-display');
+        const token = data.tokens[genIndex];
+        
+        // Add the new token
+        createTokenElement(container, token, genIndex, false);
+        
+        // Highlight it as the "current" token being processed
+        selectedIndex = genIndex;
+        Array.from(container.children).forEach((child, i) => {
+            child.className = `token ${i === genIndex ? 'active' : ''}`;
+        });
+
+        // Update button state
+        const btn = document.getElementById('btn-next-token');
+        if (genIndex === 0) btn.innerText = "✨ Generate Next Token";
+        
+        // Update Narrative for Generation
+        updateGenerationView(genIndex);
+
+        genIndex++;
+        
+        if (genIndex >= data.tokens.length) {
+            btn.disabled = true;
+            btn.innerText = "Done!";
+            document.getElementById('gen-status').innerText = "Sentence complete.";
+        } else {
+            document.getElementById('gen-status').innerText = `Generated "${token}". Next token predicted...`;
+        }
+    }
+
+    function updateGenerationView(idx) {
+        // In generation, we only look at PAST tokens (causal masking).
+        const allWeights = data.attention_weights[idx];
+        const currentWeights = allWeights.slice(0, idx + 1); // Only attend to past
+        const currentTokens = data.tokens.slice(0, idx + 1);
+
+        // Re-normalize weights for display
+        const sum = currentWeights.reduce((a, b) => a + b, 0);
+        const normWeights = currentWeights.map(w => w / sum);
+
+        // Find focus
+        let maxAttnIdx = 0;
+        let maxAttnVal = -1;
+        normWeights.forEach((w, i) => {
+            if (i !== idx && w > maxAttnVal) {
+                maxAttnVal = w;
+                maxAttnIdx = i;
+            }
+        });
+        
+        const token = data.tokens[idx];
+        const focusToken = data.tokens[maxAttnIdx];
+        const isFirst = idx === 0;
+
+        // Narrative
+        const narrative = document.getElementById('narrative-panel');
+        if (isFirst) {
+            narrative.innerHTML = `
+                <h2>Generating: "<span class="hl-query">${token}</span>"</h2>
+                <p>This is the start of the sentence.</p>
+                <p>The model initializes its hidden state with this first token.</p>
+                <div class="matrix-note" style="display:block">
+                    <strong>Matrix Update:</strong><br>
+                    The first row appears. Since there are no previous words, "${token}" only attends to itself.
+                </div>
+            `;
+        } else {
+            narrative.innerHTML = `
+                <h2>Generating: "<span class="hl-query">${token}</span>"</h2>
+                <p>To generate this word, the model looked back at the context.</p>
+                <div class="math-step">
+                    <strong>Context Focus:</strong><br>
+                    It paid <strong>${(maxAttnVal * 100).toFixed(1)}%</strong> attention to <strong>"${focusToken}"</strong>.
+                </div>
+                <p>The <span class="hl-query">Query</span> from the previous step matched the <span class="hl-key">Key</span> of "${focusToken}", helping the model decide that "${token}" was the correct next word.</p>
+                
+                <div class="matrix-note" style="display:block">
+                    <strong>Matrix Update:</strong><br>
+                    A new row was added for <strong>"${token}"</strong>.<br>
+                    This row shows how the <span class="hl-query">Query</span> for "${token}" scanned all previous <span class="hl-key">Keys</span> (columns) to find context.
+                </div>
+            `;
+        }
+
+        // Update Charts with masked data
+        Plotly.newPlot('scores-viz', [{
+            x: currentTokens,
+            y: normWeights,
+            type: 'bar',
+            marker: {
+                color: normWeights.map((w, i) => i === idx ? '#cbd5e1' : '#2563eb')
+            }
+        }], {
+            margin: {t: 30, b: 40, l: 30, r: 10}, // Increased top margin
+            xaxis: {tickangle: -45},
+            yaxis: {range: [0, 1]},
+            showlegend: false,
+            title: {
+                text: isFirst ? 'Self-Attention (Start)' : 'Attention to Previous Context',
+                font: { size: 14 }
+            }
+        });
+
+        // Pie
+        const pieValues = [];
+        const pieLabels = [];
+        normWeights.forEach((w, i) => {
+            if (w > 0.02) {
+                pieValues.push(w);
+                pieLabels.push(currentTokens[i]);
+            }
+        });
+
+        Plotly.newPlot('pie-viz', [{
+            values: pieValues,
+            labels: pieLabels,
+            type: 'pie',
+            textinfo: 'label+percent',
+            marker: {colors: pieValues.map(v => '#bfdbfe')}
+        }], {
+            margin: {t: 10, b: 10, l: 10, r: 10},
+            showlegend: false
+        });
+
+        // Heatmap (Progressive)
+        const maskedMatrix = data.attention_weights.map((row, r) => 
+            row.map((val, c) => (r <= idx && c <= idx) ? val : null)
+        );
+
+        Plotly.newPlot('heatmap-viz', [{
+            z: maskedMatrix,
+            x: data.tokens,
+            y: data.tokens,
+            type: 'heatmap',
+            colorscale: [
+                [0, '#f8fafc'],
+                [1, '#2563eb']
+            ],
+            showscale: false
+        }], {
+            margin: {t: 30, b: 80, l: 80, r: 30},
+            xaxis: {title: 'Keys (Context)', side: 'bottom'},
+            yaxis: {title: 'Queries (Generation Step)', autorange: 'reversed'}
+        });
+    }
+
+    // --- SHARED VIEW UPDATE (Explore Mode) ---
+    function updateView(idx) {
+        const token = data.tokens[idx];
+        const weights = data.attention_weights[idx];
+        
+        let maxAttnIdx = 0;
+        let maxAttnVal = -1;
+        weights.forEach((w, i) => {
+            if (i !== idx && w > maxAttnVal) {
+                maxAttnVal = w;
+                maxAttnIdx = i;
+            }
+        });
+        const focusToken = data.tokens[maxAttnIdx];
+
+        const narrative = document.getElementById('narrative-panel');
+        narrative.innerHTML = `
+            <h2>Analysis for "<span class="hl-query">${token}</span>"</h2>
+            <p>The word <strong>"${token}"</strong> is acting as a <span class="hl-query">Query</span>.</p>
+            <div class="math-step">
+                <strong>Top Match:</strong><br>
+                Paying <strong>${(maxAttnVal * 100).toFixed(1)}%</strong> attention to <strong>"${focusToken}"</strong>.
+            </div>
+            <p>The <span class="hl-query">Query vector</span> of "<em>${token}</em>" aligns with the <span class="hl-key">Key vector</span> of "<em>${focusToken}</em>".</p>
+        `;
+
+        Plotly.newPlot('scores-viz', [{
+            x: data.tokens,
+            y: weights,
+            type: 'bar',
+            marker: {
+                color: weights.map((w, i) => i === idx ? '#cbd5e1' : (w > 0.1 ? '#2563eb' : '#94a3b8'))
+            }
+        }], {
+            margin: {t: 30, b: 40, l: 30, r: 10}, // Increased top margin
+            xaxis: {tickangle: -45},
+            yaxis: {range: [0, 1]},
+            showlegend: false
+        });
+
+        const pieValues = [];
+        const pieLabels = [];
+        weights.forEach((w, i) => {
+            if (w > 0.02) {
+                pieValues.push(w);
+                pieLabels.push(data.tokens[i]);
+            }
+        });
+
+        Plotly.newPlot('pie-viz', [{
+            values: pieValues,
+            labels: pieLabels,
+            type: 'pie',
+            textinfo: 'label+percent',
+            marker: {colors: pieValues.map(v => '#bfdbfe')}
+        }], {
+            margin: {t: 10, b: 10, l: 10, r: 10},
+            showlegend: false
+        });
+
+        Plotly.newPlot('heatmap-viz', [{
+            z: data.attention_weights,
+            x: data.tokens,
+            y: data.tokens,
+            type: 'heatmap',
+            colorscale: [
+                [0, '#f8fafc'],
+                [1, '#2563eb']
+            ],
+            hovertemplate: '<b>Query:</b> %{y}<br><b>Key:</b> %{x}<br><b>Attention:</b> %{z:.2f}<extra></extra>'
+        }], {
+            margin: {t: 30, b: 80, l: 80, r: 30},
+            xaxis: {title: 'Context Words (Keys)', side: 'bottom'},
+            yaxis: {title: 'Current Word (Query)', autorange: 'reversed'}
+        });
+    }
+
+    init();
+</script>
+
+</body>
+</html>

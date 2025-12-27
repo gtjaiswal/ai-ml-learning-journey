@@ -1,0 +1,224 @@
+[
+    {
+        "txn_id": "TXN_101",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T09:00:00Z",
+            "amount": 4.50,
+            "merchant": "Daily Grind Coffee",
+            "category": "Food & Drink",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_104",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-23T08:15:00Z",
+            "amount": 2.50,
+            "merchant": "TFL",
+            "category": "Transport",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_105",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-23T18:30:00Z",
+            "amount": 15.75,
+            "merchant": "Tesco",
+            "category": "Groceries",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_106",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-24T12:45:00Z",
+            "amount": 8.99,
+            "merchant": "Chicken World",
+            "category": "Food & Drink",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_107",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-24T13:15:00Z",
+            "amount": 4.20,
+            "merchant": "Boots",
+            "category": "Pharmacy",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_108",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-25T08:20:00Z",
+            "amount": 2.50,
+            "merchant": "TFL",
+            "category": "Transport",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_109",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-25T19:00:00Z",
+            "amount": 11.50,
+            "merchant": "Chicken World",
+            "category": "Food & Drink",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_110",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-26T17:45:00Z",
+            "amount": 18.00,
+            "merchant": "Tesco",
+            "category": "Groceries",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_111",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-26T08:15:00Z",
+            "amount": 2.50,
+            "merchant": "TFL",
+            "category": "Transport",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_112",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T08:00:00Z",
+            "amount": 3.99,
+            "merchant": "Daily Grind Coffee",
+            "category": "Food & Drink",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_102",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T09:01:00Z",
+            "amount": 4.50,
+            "merchant": " Grind Coffee",
+            "category": "Food & Drink",
+            "location": "Delhi, India"
+        }
+    },
+    {
+        "txn_id": "TXN_103",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T09:30:00Z",
+            "amount": 50,
+            "merchant": "Fancy Tea House",
+            "category": "Food & Drink",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_113",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T10:05:00Z",
+            "amount": 43.44,
+            "merchant": "Crypto.com",
+            "category": "Investments",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_114",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T10:07:00Z",
+            "amount": 56756.00,
+            "merchant": "Crypto.com",
+            "category": "Investments",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_115",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T10:09:00Z",
+            "amount": 9876.98,
+            "merchant": "Crypto.com",
+            "category": "Investments",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_116",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T12:00:00Z",
+            "amount": -500.00,
+            "merchant": "Mega Electronics",
+            "category": "Electronics",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_117",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-27T00:30:00Z",
+            "amount": 85.00,
+            "merchant": "Night Owl Fashion",
+            "category": "Clothing",
+            "location": "London, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_118",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-28T14:00:00Z",
+            "amount": 12.50,
+            "merchant": "The Hub Co-Working",
+            "category": "Business Services",
+            "location": "Brighton, UK"
+        }
+    },
+    {
+        "txn_id": "TXN_119",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-28T16:00:00Z",
+            "amount": 15.00,
+            "merchant": "App Store",
+            "category": "Digital Services",
+            "location": "London, UK",
+            "entry_method": "Apple Pay",
+            "device_fingerprint": "Samsung Galaxy S22"
+        }
+    },
+    {
+        "txn_id": "TXN_120",
+        "txn_details": {
+            "card_number": "1234-5678-9012-3456",
+            "timestamp": "2023-10-29T11:00:00Z",
+            "amount": 10.00,
+            "merchant": "British Airways Onboard",
+            "category": "Travel",
+            "location": "In-Flight"
+        }
+    }
+]
