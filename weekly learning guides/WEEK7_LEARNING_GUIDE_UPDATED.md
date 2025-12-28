@@ -11,8 +11,8 @@
 By the end of this guide, you should understand:
 
 1. **What is Redis** and how caching improves performance
-2. **What is OpenSearch** and how it differs from traditional databases
-3. **How search engines work** - inverted indexes, analyzers, tokenization
+2. **What is OpenSearch** and how it differs from traditional databases   ✅
+3. **How search engines work** - inverted indexes, analyzers, tokenization   ✅
 4. **BM25 algorithm** - the ranking function behind keyword search
 5. **Index mapping** - defining document structure
 6. **Query DSL** - how to build search queries
@@ -22,9 +22,9 @@ By the end of this guide, you should understand:
 
 ---
 
-## 📖 MODULE 1: Redis Fundamentals (45 minutes)
+## 📖 MODULE 1: Redis Fundamentals (45 minutes)   ✅
 
-### **What is Redis?**
+### **What is Redis?**   ✅
 
 Redis = **RE**mote **DI**ctionary **S**erver
 
@@ -42,7 +42,7 @@ It's an **in-memory data structure store** - think of it as:
 | PostgreSQL (Disk) | ~10ms | Persistent data |
 | OpenSearch (Disk) | ~50ms | Full-text search |
 
-### **When to use Redis?**
+### **When to use Redis?**   ✅
 
 ✅ **Perfect for:**
 - Caching search results (← what we're doing!)
@@ -62,9 +62,9 @@ It's an **in-memory data structure store** - think of it as:
 - **OpenSearch** = Search index (fast text search)
 - **Redis** = Cache layer (frequently accessed searches)
 
-### **Core Concepts:**
+### **Core Concepts:**   ✅
 
-**1. Key-Value Store:**
+**1. Key-Value Store:**   ✅
 ```
 Key:   "search:abc123"
 Value: '{"query": "ML", "total": 42, "hits": [...]}'
@@ -75,7 +75,7 @@ Simple as a Python dictionary, but:
 - Persists between restarts (with AOF)
 - Automatic expiration (TTL)
 
-**2. TTL (Time To Live):**
+**2. TTL (Time To Live):**   ✅
 ```python
 # Set key with 300-second expiration
 redis.setex("search:123", 300, '{"results": [...]}')
@@ -88,7 +88,7 @@ redis.setex("search:123", 300, '{"results": [...]}')
 - Free up memory automatically
 - Balance freshness vs performance
 
-**3. Eviction Policies:**
+**3. Eviction Policies:**   ✅
 
 What happens when Redis runs out of memory?
 
@@ -103,7 +103,7 @@ What happens when Redis runs out of memory?
 - Random: Remove random keys
 - No eviction: Reject new writes when full
 
-**4. Persistence:**
+**4. Persistence:**   ✅
 
 **AOF (Append-Only File)** - We use this:
 - Logs every write operation
@@ -116,7 +116,7 @@ What happens when Redis runs out of memory?
 - Faster but can lose recent data
 - Good for: Truly temporary cache
 
-### **Real-World Example:**
+### **Real-World Example:**   ✅
 
 **Without Redis:**
 ```
@@ -150,7 +150,7 @@ Check Redis cache (HIT) (~1ms) ← 100x faster!
 Return cached results
 ```
 
-### **Resources:**
+### **Resources:**   ✅
 
 **Watch (15 min):**
 - "Redis in 100 Seconds" by Fireship: https://www.youtube.com/watch?v=G1rOthIU-uo
@@ -170,9 +170,9 @@ Return cached results
 
 ---
 
-## 📖 MODULE 2: OpenSearch Fundamentals (1 hour)
+## 📖 MODULE 2: OpenSearch Fundamentals (1 hour)   ✅
 
-### **What is OpenSearch?**
+### **What is OpenSearch?**   ✅
 
 OpenSearch is a **search and analytics engine** - think of it as:
 - Google search for your data
@@ -191,7 +191,7 @@ OpenSearch is a **search and analytics engine** - think of it as:
 | Exact matches | Fuzzy matches, relevance scoring |
 | `WHERE title = 'AI'` | `"Machine Learning" → finds "ML", "machine learning", "AI"` |
 
-### **When to use OpenSearch?**
+### **When to use OpenSearch?**   ✅
 
 ✅ **Good for:**
 - Full-text search (searching papers, articles, documents)
@@ -210,7 +210,7 @@ OpenSearch is a **search and analytics engine** - think of it as:
 - **OpenSearch** = Search layer (fast text search)
 - **Redis** = Cache layer (frequently accessed searches)
 
-### **Core Concepts:**
+### **Core Concepts:**   ✅
 
 **1. Index** = Like a database table
 - Contains documents
@@ -233,7 +233,7 @@ OpenSearch is a **search and analytics engine** - think of it as:
 - Lowercases, removes stopwords, stems words
 - "Machine Learning Papers" → ["machine", "learn", "paper"]
 
-### **Resources:**
+### **Resources:**   ✅
 
 **Watch (30 min):**
 - "What is Elasticsearch" by Elastic (OpenSearch is a fork): https://www.youtube.com/watch?v=C3tlMqaNSaI
@@ -246,9 +246,9 @@ OpenSearch is a **search and analytics engine** - think of it as:
 
 ---
 
-## 📖 MODULE 3: Inverted Indexes (45 min)
+## 📖 MODULE 3: Inverted Indexes (45 min)   ✅
 
-### **How Search Engines Work**
+### **How Search Engines Work**   ✅
 
 Traditional database:
 ```
@@ -272,7 +272,7 @@ Term → Document IDs
 
 To find "Learning", lookup once in index. Fast!
 
-### **How it's built:**
+### **How it's built:**   ✅
 
 **Step 1: Tokenization**
 ```
@@ -293,13 +293,13 @@ To find "Learning", lookup once in index. Fast!
 "basic"   → doc1
 ```
 
-### **Why it's fast:**
+### **Why it's fast:**   ✅
 
 - Lookup in hash map: O(1)
 - No scanning rows: O(n) → O(1)
 - Scales to billions of documents
 
-### **Resources:**
+### **Resources:**   ✅
 
 **Watch (20 min):**
 - "How do search engines work?" by Fireship: https://www.youtube.com/watch?v=0LTXCcVRQi0
@@ -310,9 +310,9 @@ To find "Learning", lookup once in index. Fast!
 
 ---
 
-## 📖 MODULE 4: BM25 Algorithm (1 hour)
+## 📖 MODULE 4: BM25 Algorithm (1 hour)   ✅
 
-### **What is BM25?**
+### **What is BM25?**   ✅
 
 BM25 = **Best Match 25** (25th iteration of the algorithm)
 
@@ -325,9 +325,9 @@ Score = How often term appears in document
         × Document length normalization
 ```
 
-### **Example:**
+### **Example:**   ✅
 
-**Query:** "machine learning"
+**Query:** "machine learning"   ✅
 
 **Document 1:** "Machine learning is a subset of AI. Machine learning uses algorithms."
 - "machine" appears 2 times
@@ -335,24 +335,24 @@ Score = How often term appears in document
 - Term frequency: HIGH
 - **Score: HIGH**
 
-**Document 2:** "This paper mentions machine learning once."
+**Document 2:** "This paper mentions machine learning once."   ✅
 - "machine" appears 1 time
 - "learning" appears 1 time
 - Term frequency: LOW
 - **Score: LOWER**
 
-### **BM25 Components:**
+### **BM25 Components:**   ✅
 
-**1. Term Frequency (TF)**
+**1. Term Frequency (TF)**   ✅
 - How many times does term appear in document?
 - But with diminishing returns (2→3 occurrences matters less than 0→1)
 
-**2. Inverse Document Frequency (IDF)**
+**2. Inverse Document Frequency (IDF)**   ✅
 - How rare is the term across all documents?
 - "the" appears everywhere → LOW score
 - "quantum" appears rarely → HIGH score
 
-**3. Document Length Normalization**
+**3. Document Length Normalization**   ✅
 - Short documents with term → HIGHER score
 - Long documents with term → LOWER score
 - Prevents long documents from dominating
@@ -373,12 +373,12 @@ Where:
 - b = length normalization (usually 0.75)
 ```
 
-**Don't memorize this!** Just understand:
+**Don't memorize this!** Just understand:   ✅
 - More term occurrences = higher score (but diminishing returns)
 - Rarer terms = higher score
 - Shorter documents = slightly higher score
 
-### **In Practice:**
+### **In Practice:**   ✅
 
 OpenSearch does this automatically!
 
@@ -394,12 +394,12 @@ OpenSearch does this automatically!
 
 BM25 calculates scores for all documents, returns best matches first.
 
-### **Resources:**
+### **Resources:**   ✅
 
-**Watch (15 min):**
+**Watch (15 min):**   ✅
 - "BM25 Explained" by Elastic: https://www.elastic.co/blog/practical-bm25-part-2-the-bm25-algorithm-and-its-variables
 
-**Read (30 min):**
+**Read (30 min):**   ✅
 - Wikipedia BM25: https://en.wikipedia.org/wiki/Okapi_BM25
 - OpenSearch "Similarity" docs: https://opensearch.org/docs/latest/query-dsl/
 
@@ -408,9 +408,9 @@ BM25 calculates scores for all documents, returns best matches first.
 
 ---
 
-## 📖 MODULE 5: Index Mapping (45 min)
+## 📖 MODULE 5: Index Mapping (45 min)   ✅
 
-### **What is Mapping?**
+### **What is Mapping?**   ✅
 
 Mapping = Schema definition for your index
 
@@ -419,7 +419,7 @@ It tells OpenSearch:
 - What type each field is (text, keyword, date, etc.)
 - How to analyze text fields
 
-### **Field Types:**
+### **Field Types:**   ✅
 
 **1. text** - For full-text search
 - Analyzed (tokenized, lowercased, stemmed)
@@ -437,7 +437,7 @@ It tells OpenSearch:
 
 **4. integer, float** - For numbers
 
-### **Example Mapping:**
+### **Example Mapping:**   ✅
 
 ```json
 {
@@ -465,18 +465,18 @@ It tells OpenSearch:
 }
 ```
 
-### **Analyzers:**
+### **Analyzers:**   ✅
 
-**Standard analyzer** (default):
+**Standard analyzer** (default):   ✅
 1. Tokenize: "Machine Learning" → ["Machine", "Learning"]
 2. Lowercase: ["Machine", "Learning"] → ["machine", "learning"]
 3. Remove stopwords: ["the", "machine", "learning"] → ["machine", "learning"]
 
-**Custom analyzers:**
+**Custom analyzers:**   ✅
 - English analyzer: Stems words ("running" → "run")
 - Keyword analyzer: No analysis (keeps exact text)
 
-### **Why Mapping Matters:**
+### **Why Mapping Matters:**   ✅
 
 Wrong mapping:
 ```json
@@ -492,7 +492,7 @@ Right mapping:
 
 Searching for `"2401.00001"` only finds exact match.
 
-### **Resources:**
+### **Resources:**   ✅
 
 **Read (30 min):**
 - OpenSearch field types: https://opensearch.org/docs/latest/field-types/
@@ -503,11 +503,11 @@ Searching for `"2401.00001"` only finds exact match.
 
 ---
 
-## 📖 MODULE 6: Query DSL (1 hour)
+## 📖 MODULE 6: Query DSL (1 hour)   ✅
 
-### **What is Query DSL?**
+### **What is Query DSL?**   ✅
 
-DSL = **Domain Specific Language**
+DSL = **Domain Specific Language**   ✅
 
 It's JSON-based query syntax for OpenSearch:
 
@@ -521,9 +521,9 @@ It's JSON-based query syntax for OpenSearch:
 }
 ```
 
-### **Common Query Types:**
+### **Common Query Types:**   ✅
 
-**1. match** - Full-text search
+**1. match** - Full-text search   ✅
 ```json
 {
   "query": {
@@ -550,7 +550,7 @@ Finds: "neural networks", "network neurology", "neuronal net"
 
 `^3` = 3x boost (title matches score 3x higher)
 
-**3. term** - Exact match (for keyword fields)
+**3. term** - Exact match (for keyword fields)   ✅
 ```json
 {
   "query": {
@@ -561,7 +561,7 @@ Finds: "neural networks", "network neurology", "neuronal net"
 }
 ```
 
-**4. bool** - Combine queries
+**4. bool** - Combine queries   ✅
 ```json
 {
   "query": {
@@ -582,7 +582,7 @@ Finds: "neural networks", "network neurology", "neuronal net"
 - `should`: Optional (boosts score if matched)
 - `must_not`: Excludes documents
 
-### **Pagination:**
+### **Pagination:**   ✅
 
 ```json
 {
@@ -595,7 +595,7 @@ Finds: "neural networks", "network neurology", "neuronal net"
 - `from`: Offset (0-indexed)
 - `size`: Results per page
 
-### **Highlighting:**
+### **Highlighting:**   ✅
 
 ```json
 {
@@ -618,12 +618,12 @@ Returns: `"This is <mark>machine learning</mark>"`
 - Match query: https://opensearch.org/docs/latest/query-dsl/full-text/match/
 - Bool query: https://opensearch.org/docs/latest/query-dsl/compound/bool/
 
-**Practice (15 min):**
+**Practice (15 min):**   ✅
 - Try queries in OpenSearch Dashboards Dev Tools
 
 ---
 
-## 📖 MODULE 7: Python Clients (45 min)
+## 📖 MODULE 7: Python Clients (45 min) ✅
 
 ### **Redis Client (redis-py):**
 
@@ -670,7 +670,7 @@ exists = client.exists('search:abc123')
 
 ### **OpenSearch Client (opensearch-py):**
 
-**Installation:**
+**Installation:**   ✅
 
 ```bash
 pip install opensearch-py
@@ -678,7 +678,7 @@ pip install opensearch-py
 
 **Basic Usage:**
 
-**Connect:**
+**Connect:**   ✅
 ```python
 from opensearchpy import OpenSearch
 
@@ -690,7 +690,7 @@ client = OpenSearch(
 )
 ```
 
-**Create Index:**
+**Create Index:**   ✅
 ```python
 index_name = "papers"
 mapping = {
@@ -705,7 +705,7 @@ mapping = {
 client.indices.create(index=index_name, body=mapping)
 ```
 
-**Index Document:**
+**Index Document:**   ✅
 ```python
 document = {
     "title": "Machine Learning Paper",
@@ -719,7 +719,7 @@ client.index(
 )
 ```
 
-**Search:**
+**Search:**   ✅
 ```python
 query = {
     "query": {
@@ -753,7 +753,7 @@ for hit in response['hits']['hits']:
 
 ---
 
-## 🎯 HANDS-ON EXERCISES
+## 🎯 HANDS-ON EXERCISES ✅
 
 ### **Exercise 1: Test Redis (15 min)**
 
@@ -828,7 +828,7 @@ Search:
 
 ---
 
-## 🎓 LEARNING SCHEDULE
+## 🎓 LEARNING SCHEDULE ✅
 
 **Weekend Before Week 7:**
 
@@ -847,7 +847,7 @@ Search:
 
 ---
 
-## 📋 WEEK 7 READINESS CHECKLIST
+## 📋 WEEK 7 READINESS CHECKLIST ✅
 
 **Before starting Steps 9-12, you should be able to:**
 
@@ -881,7 +881,7 @@ Search:
 
 ---
 
-## 🎯 KEY TAKEAWAYS
+## 🎯 KEY TAKEAWAYS ✅
 
 **Remember these 7 things:**
 
@@ -920,7 +920,7 @@ Search:
 
 ---
 
-## 🚀 NEXT STEPS
+## 🚀 NEXT STEPS ✅
 
 After completing this guide:
 

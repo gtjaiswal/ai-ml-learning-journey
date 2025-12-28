@@ -1,0 +1,95 @@
+###
+GET {{baseUrl}}/banking_products/_count
+Accept: application/json
+Authorization: Basic {{username}} {{password}}
+
+###
+GET {{baseUrl}}/banking_products/_search
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "query": {
+    "term": {
+      "status": "ACTIVE"
+    }
+  }
+}
+
+###
+GET {{baseUrl}}/banking_products/_search
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "query": {
+    "match": {
+      "description": "card"
+    }
+  }
+}
+
+###
+GET {{baseUrl}}/banking_products/_search
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "query": {
+    "term": {
+      "annual_fee": 0
+    }
+  }
+}
+
+
+###
+GET {{baseUrl}}/banking_products/_search
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "query": {
+    "term": {
+      "is_premium": true
+    }
+  }
+}
+
+###
+GET {{baseUrl}}/banking_products/_search
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "query": {
+    "range": {
+      "annual_fee": {
+        "gte": 50,
+        "lte": 200
+      }
+    }
+  }
+}
+
+###
+GET {{baseUrl}}/banking_products/_search
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "query": {
+    "range": {
+      "launch_date": {
+        "gte": "2023-01-01",
+        "lte": "2023-12-31"
+      }
+    }
+  }
+}

@@ -89,10 +89,10 @@ services:
         AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql://al_ml_learning_user:al_ml_learning_password@postgres/al_ml_learning_db
         AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       volumes:
-        - ./concepts/month1/week4/learn_airflow/dags:/opt/airflow/dags
-        - ./concepts/month1/week4/learn_airflow/logs:/opt/airflow/logs
-        - ./concepts/month1/week4/learn_airflow/plugins:/opt/airflow/plugins
-        - ./concepts/month1/week4/learn_airflow/data:/opt/airflow/data
+        - ./concepts/learn_airflow/dags:/opt/airflow/dags
+        - ./concepts/learn_airflow/logs:/opt/airflow/logs
+        - ./concepts/learn_airflow/plugins:/opt/airflow/plugins
+        - ./concepts/learn_airflow/data:/opt/airflow/data
       ports:
         - "8080:8080"
       command: webserver
@@ -117,18 +117,53 @@ services:
         AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql://al_ml_learning_user:al_ml_learning_password@postgres/al_ml_learning_db
         AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       volumes:
-        - ./concepts/month1/week4/learn_airflow/dags:/opt/airflow/dags
-        - ./concepts/month1/week4/learn_airflow/logs:/opt/airflow/logs
-        - ./concepts/month1/week4/learn_airflow/plugins:/opt/airflow/plugins
-        - ./concepts/month1/week4/learn_airflow/data:/opt/airflow/data
+        - ./concepts/learn_airflow/dags:/opt/airflow/dags
+        - ./concepts/learn_airflow/logs:/opt/airflow/logs
+        - ./concepts/learn_airflow/plugins:/opt/airflow/plugins
+        - ./concepts/learn_airflow/data:/opt/airflow/data
       command: scheduler
       networks:
         - al_ml_learning_network
       restart: always
 
+  redis:
+      image: redis:7-alpine
+      container_name: redis-learning
+      ports:
+        - "6379:6379"
+      volumes:
+        # Persist data even after container restart
+        - redis_data:/data
+        # Custom config file (optional)
+        - ./redis.conf:/usr/local/etc/redis/redis.conf
+      command: redis-server /usr/local/etc/redis/redis.conf
+      restart: unless-stopped
+      networks:
+        - al_ml_learning_network
+      healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 10s
+        timeout: 3s
+        retries: 3
+
+  # Optional: Redis Insight (GUI for visualization)
+  redis-insight:
+      image: redislabs/redisinsight:latest
+      container_name: redis-insight
+      ports:
+        - "8001:8001"
+      volumes:
+        - redisinsight_data:/db
+      networks:
+        - al_ml_learning_network
+      depends_on:
+        - redis
+
 volumes:
   postgres_data:
   opensearch-data:
+  redis_data:
+  redisinsight_data:
 
 networks:
   al_ml_learning_network:
